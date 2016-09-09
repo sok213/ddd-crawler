@@ -1,0 +1,12 @@
+$canvas-color: black;
+
+body { text-align: center; }
+
+.logo {
+	margin-top: 10px;
+}
+
+#gameCanvas {
+	background-color: $canvas-color;
+	margin-top: -30px;
+}
