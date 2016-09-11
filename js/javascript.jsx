@@ -2,9 +2,13 @@ var DungeonGame = React.createClass({
 	getInitialState: function() {
 		return {
 			hero: {
-				level: 1,
+				speed: 256, // movement in pixels per second
+				x: 0,
+				y: 0,
+				weapon: 'None',
 				health: 100,
-				weapon: "None"
+				maxDMG: 15,
+			level: 1
 			},
 			monster: {
 				health: 100,
@@ -14,6 +18,11 @@ var DungeonGame = React.createClass({
 			weapon: {
 				x:0,
 				y:0
+			},
+			healthPack: {
+				x: 0,
+				y: 0,
+				status: false
 			}
 		}
 	},
@@ -24,6 +33,7 @@ var DungeonGame = React.createClass({
 		var ctx = canvas.getContext('2d');
 		var healthSound = document.createElement('AUDIO');
 		healthSound.src = "assets/sounds/health.mp3";
+		var self = this.state;
 
 
 		// Disables anti-aliasing for sharp sprites.
@@ -75,40 +85,6 @@ var DungeonGame = React.createClass({
 		};
 		monsterImage.src = "assets/images/demon2.png";
 
-		// Game Objects
-		var hero = {
-			speed: 256, // movement in pixels per second
-			x: 0,
-			y: 0,
-			weapon: 'None',
-			health: 100,
-			maxDMG: 15,
-			level: 1
-		};
-
-		// Monster won't move so it will only have coordinates.
-		var monster = {
-			health: 100,
-			x: 0,
-			y: 0
-		};
-
-		// Health items
-		var health = {
-			x:0,
-			y:0,
-			status: false
-		}
-
-		// weapn item
-		var weapon = {
-			x:0,
-			y:0
-		}
-
-		// Stores the number of monsters the player has caught.
-		var monstersCaught = 0;
-
 		// Handle keyboard controls.
 		var keysDown = {};
 
@@ -129,169 +105,169 @@ var DungeonGame = React.createClass({
 
 		var generateMonster = function() {
 			// Throw the monster somewhere on the screen randomly
-			monster.x = 32 + (Math.random() * (canvas.width - 64));
-			monster.y = 32 + (Math.random() * (canvas.height - 64));
+			self.monster.x = 32 + (Math.random() * (canvas.width - 64));
+			self.monster.y = 32 + (Math.random() * (canvas.height - 64));
 
-			// Throw health items somewhere on the screen randomly.
-			health.x = 32 + (Math.random() * (canvas.width - 64));
-			health.y = 32 + (Math.random() * (canvas.height - 64));
+			// Throw healthPack items somewhere on the screen randomly.
+			self.healthPack.x = 32 + (Math.random() * (canvas.width - 64));
+			self.healthPack.y = 32 + (Math.random() * (canvas.height - 64));
 		};
 
 		// Player movement and wall collsion rules.
 		var playerMovement = function(modifier) {
-			if(hero.y < 3 && hero.x < -5) {
+			if(self.hero.y < 3 && self.hero.x < -5) {
 				// Player holding down
 				if(40 in keysDown) {
-					hero.y += hero.speed * modifier;
+					self.hero.y += self.hero.speed * modifier;
 				}
 				// Player holding right
 				if(39 in keysDown) {
-					hero.x += hero.speed * modifier;
+					self.hero.x += self.hero.speed * modifier;
 				}
-			} else if(hero.y < 660 && hero.x < -5) {
+			} else if(self.hero.y < 660 && self.hero.x < -5) {
 				// Player holding up
 				if(38 in keysDown) { 
-					hero.y -= hero.speed * modifier; 
+					self.hero.y -= self.hero.speed * modifier; 
 				}
 				// Player holding right
 				if(39 in keysDown) {
-					hero.x += hero.speed * modifier;
+					self.hero.x += self.hero.speed * modifier;
 				}
 				// Player holding down
 				if(40 in keysDown) {
-					hero.y += hero.speed * modifier;
+					self.hero.y += self.hero.speed * modifier;
 				}
-			} else if(hero.y > 660 && hero.x > 1170) {
+			} else if(self.hero.y > 660 && self.hero.x > 1170) {
 				// Player holding up
 				if(38 in keysDown) { 
-					hero.y -= hero.speed * modifier; 
+					self.hero.y -= self.hero.speed * modifier; 
 				}
 				// Player holding left
 				if(37 in keysDown) {
-					hero.x -= hero.speed * modifier;
+					self.hero.x -= self.hero.speed * modifier;
 				}
-			} else if(hero.y > 660 && hero.x < -5) {
+			} else if(self.hero.y > 660 && self.hero.x < -5) {
 				// Player holding up
 				if(38 in keysDown) { 
-					hero.y -= hero.speed * modifier; 
+					self.hero.y -= self.hero.speed * modifier; 
 				}
 				// Player holding right
 				if(39 in keysDown) {
-					hero.x += hero.speed * modifier;
+					self.hero.x += self.hero.speed * modifier;
 				}
-			} else if(hero.y < 3 && hero.x > 1170) {
+			} else if(self.hero.y < 3 && self.hero.x > 1170) {
 				// Player holding down
 				if(40 in keysDown) {
-					hero.y += hero.speed * modifier;
+					self.hero.y += self.hero.speed * modifier;
 				}
 				// Player holding left
 				if(37 in keysDown) {
-					hero.x -= hero.speed * modifier;
+					self.hero.x -= self.hero.speed * modifier;
 				}
-			} else if(hero.y < 3){
+			} else if(self.hero.y < 3){
 				// Player holding down
 				if(40 in keysDown) {
-					hero.y += hero.speed * modifier;
+					self.hero.y += self.hero.speed * modifier;
 				}
 				// Player holding left
 				if(37 in keysDown) {
-					hero.x -= hero.speed * modifier;
+					self.hero.x -= self.hero.speed * modifier;
 				}
 				// Player holding right
 				if(39 in keysDown) {
-					hero.x += hero.speed * modifier;
+					self.hero.x += self.hero.speed * modifier;
 				}
-			} else if(hero.y > 660) {
+			} else if(self.hero.y > 660) {
 				// Player holding up
 				if(38 in keysDown) { 
-					hero.y -= hero.speed * modifier; 
+					self.hero.y -= self.hero.speed * modifier; 
 				}
 				// Player holding left
 				if(37 in keysDown) {
-					hero.x -= hero.speed * modifier;
+					self.hero.x -= self.hero.speed * modifier;
 				}
 				// Player holding right
 				if(39 in keysDown) {
-					hero.x += hero.speed * modifier;
+					self.hero.x += self.hero.speed * modifier;
 				}
-			} else if(hero.x < -5) {
+			} else if(self.hero.x < -5) {
 				// Player holding up
 				if(38 in keysDown) { 
-					hero.y -= hero.speed * modifier; 
+					self.hero.y -= self.hero.speed * modifier; 
 				}
 				// Player holding down
 				if(40 in keysDown) {
-					hero.y += hero.speed * modifier;
+					self.hero.y += self.hero.speed * modifier;
 				}
 				// Player holding right
 				if(39 in keysDown) {
-					hero.x += hero.speed * modifier;
+					self.hero.x += self.hero.speed * modifier;
 				}
-			} else if(hero.x > 1170) {
+			} else if(self.hero.x > 1170) {
 				// Player holding up
 				if(38 in keysDown) { 
-					hero.y -= hero.speed * modifier; 
+					self.hero.y -= self.hero.speed * modifier; 
 				}
 				// Player holding down
 				if(40 in keysDown) {
-					hero.y += hero.speed * modifier;
+					self.hero.y += self.hero.speed * modifier;
 				}
 				// Player holding left
 				if(37 in keysDown) {
-					hero.x -= hero.speed * modifier;
+					self.hero.x -= self.hero.speed * modifier;
 				}
 			} else {
 				// Player holding up
 				if(38 in keysDown) { 
-					hero.y -= hero.speed * modifier; 
+					self.hero.y -= self.hero.speed * modifier; 
 				}
 				// Player holding down
 				if(40 in keysDown) {
-					hero.y += hero.speed * modifier;
+					self.hero.y += self.hero.speed * modifier;
 				}
 				// Player holding left
 				if(37 in keysDown) {
-					hero.x -= hero.speed * modifier;
+					self.hero.x -= self.hero.speed * modifier;
 				}
 				// Player holding right
 				if(39 in keysDown) {
-					hero.x += hero.speed * modifier;
+					self.hero.x += self.hero.speed * modifier;
 				}
 			}
 
 			// Are they touching?
 			if(
-				hero.x <= (monster.x + 32)
-				&& monster.x <= (hero.x + 32)
-				&& hero.y <= (monster.y + 32)
-				&& monster.y <= (hero.y + 32)
+				self.hero.x <= (self.monster.x + 32)
+				&& self.monster.x <= (self.hero.x + 32)
+				&& self.hero.y <= (self.monster.y + 32)
+				&& self.monster.y <= (self.hero.y + 32)
 			) {
-				hero.health -= 15;
+				self.hero.health -= 15;
 				console.log("Player has encountered a demon.")
 			}
 
 			// When player runs out of health.
-			if(hero.health <= 0) {
+			if(self.hero.health <= 0) {
 				console.log('Player has died.');
-				hero.health = 0;
+				self.hero.health = 0;
 			}
 
 			// Detect if player touched Health Pack.
-			if(hero.x <= (health.x + 32)
-				&& health.x <= (hero.x + 32)
-				&& hero.y <= (health.y + 32)
-				&& health.y <= (hero.y + 32)
-				&& health.status === false
+			if(self.hero.x <= (self.healthPack.x + 32)
+				&& self.healthPack.x <= (self.hero.x + 32)
+				&& self.hero.y <= (self.healthPack.y + 32)
+				&& self.healthPack.y <= (self.hero.y + 32)
+				&& self.healthPack.status === false
 			) {
-				if(hero.health < 100) {
+				if(self.hero.health < 100) {
 					healthSound.play();
-					health.status = true;
-					hero.health += 25;
+					self.healthPack.status = true;
+					self.hero.health += 25;
 
-					if(hero.health > 100) {
-						hero.health = 100;
+					if(self.hero.health > 100) {
+						self.hero.health = 100;
 					}
-					console.log('Player has picked up Health Pack. Player health: '+hero.health);
+					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
 				} else {
 					console.log('Player health is full.')
 				}
@@ -310,22 +286,21 @@ var DungeonGame = React.createClass({
 		*/
 
 		// Draw everything
-		var self = this.state;
 		var render = function() {
 			if(bgReady) {
 				ctx.drawImage(bgImage, 0, 0);
 			}
 
 			if(heroReady) {
-				ctx.drawImage(heroImage, hero.x, hero.y, heroImage.width * 2.2, heroImage.height * 2.2);
+				ctx.drawImage(heroImage, self.hero.x, self.hero.y, heroImage.width * 2.2, heroImage.height * 2.2);
 			}
 
 			if(monsterReady) {
-				ctx.drawImage(monsterImage, monster.x, monster.y, monsterImage.width / 8, monsterImage.height / 8);
+				ctx.drawImage(monsterImage, self.monster.x, self.monster.y, monsterImage.width / 8, monsterImage.height / 8);
 			}
 
-			if(healthReady && health.status === false) {
-				ctx.drawImage(healthImage, health.x, health.y, 25, 25);
+			if(healthReady && self.healthPack.status === false) {
+				ctx.drawImage(healthImage, self.healthPack.x, self.healthPack.y, 25, 25);
 				//ctx.drawImage(healthImage, health2.x, health2.y, 25, 25);
 			}
 
