@@ -66,6 +66,8 @@ weaponImage.onload = function () {
 };
 weaponImage.src = "assets/images/hammer.png";
 
+
+
 // Health pack image
 var healthReady = false;
 var healthImage = new Image();
