@@ -5,6 +5,15 @@ var DungeonGame = React.createClass({
 				level: 0,
 				health: 100,
 				weapon: "None"
+			},
+			monster: {
+				health: 100,
+				x: 0,
+				y: 0
+			},
+			weapon: {
+				x:0,
+				y:0
 			}
 		}
 	},
@@ -20,15 +29,11 @@ var DungeonGame = React.createClass({
 
 ReactDOM.render(<DungeonGame />, document.getElementById('body'));
 
-// Code to create moveable player sprite.
-// Character movement code is credited to Matt Hacket of Lost Decade Games. 
-// Resource used for character movement - http://www.lostdecadegames.com/how-to-make-a-simple-html5-canvas-game/
-// ========================================
-
-// Create the canvas.
-
 var canvas = document.getElementById('gameCanvas');
 var ctx = canvas.getContext('2d');
+var healthSound = document.createElement('AUDIO');
+healthSound.src = "assets/sounds/health.mp3";
+
 
 // Disables anti-aliasing for sharp sprites.
 ctx.webkitImageSmoothingEnabled = false;
@@ -95,33 +100,11 @@ var monster = {
 	y: 0
 };
 
-var monster2 = {
-	health: 100,
-	x: 0,
-	y: 0
-};
-
-var monster3 = {
-	health: 100,
-	x: 0,
-	y: 0
-};
-
-var monster4 = {
-	health: 100,
-	x: 0,
-	y: 0
-};
-
 // Health items
 var health = {
 	x:0,
-	y:0
-}
-
-var health2 = {
-	x:0,
-	y:0
+	y:0,
+	status: false
 }
 
 // weapn item
@@ -156,21 +139,9 @@ var generateMonster = function() {
 	monster.x = 32 + (Math.random() * (canvas.width - 64));
 	monster.y = 32 + (Math.random() * (canvas.height - 64));
 
-	monster2.x = 32 + (Math.random() * (canvas.width - 64));
-	monster2.y = 32 + (Math.random() * (canvas.height - 64));
-
-	monster3.x = 32 + (Math.random() * (canvas.width - 64));
-	monster3.y = 32 + (Math.random() * (canvas.height - 64));
-
-	monster4.x = 32 + (Math.random() * (canvas.width - 64));
-	monster4.y = 32 + (Math.random() * (canvas.height - 64));
-
 	// Throw health items somewhere on the screen randomly.
 	health.x = 32 + (Math.random() * (canvas.width - 64));
 	health.y = 32 + (Math.random() * (canvas.height - 64));
-
-	health2.x = 32 + (Math.random() * (canvas.width - 64));
-	health2.y = 32 + (Math.random() * (canvas.height - 64));
 };
 
 // Player movement and wall collsion rules.
@@ -302,7 +273,14 @@ var playerMovement = function(modifier) {
 		&& hero.y <= (monster.y + 32)
 		&& monster.y <= (hero.y + 32)
 	) {
+		hero.health -= 15;
 		console.log("Player has encountered a demon.")
+	}
+
+	// When player runs out of health.
+	if(hero.health <= 0) {
+		console.log('Player has died.');
+		hero.health = 0;
 	}
 
 	// Detect if player touched Health Pack.
@@ -310,8 +288,20 @@ var playerMovement = function(modifier) {
 		&& health.x <= (hero.x + 32)
 		&& hero.y <= (health.y + 32)
 		&& health.y <= (hero.y + 32)
+		&& health.status === false
 	) {
-		console.log('Player has picked up Health Pack.')
+		if(hero.health < 100) {
+			healthSound.play();
+			health.status = true;
+			hero.health += 25;
+
+			if(hero.health > 100) {
+				hero.health = 100;
+			}
+			console.log('Player has picked up Health Pack. Player health: '+hero.health);
+		} else {
+			console.log('Player health is full.')
+		}
 	}
 };
 
@@ -338,12 +328,9 @@ var render = function() {
 
 	if(monsterReady) {
 		ctx.drawImage(monsterImage, monster.x, monster.y, monsterImage.width / 8, monsterImage.height / 8);
-		//ctx.drawImage(monsterImage, monster2.x, monster2.y, monsterImage.width / 8, monsterImage.height / 8);
-		//ctx.drawImage(monsterImage, monster3.x, monster3.y, monsterImage.width / 8, monsterImage.height / 8);
-		//ctx.drawImage(monsterImage, monster4.x, monster4.y, monsterImage.width / 8, monsterImage.height / 8);
 	}
 
-	if(healthReady) {
+	if(healthReady && health.status === false) {
 		ctx.drawImage(healthImage, health.x, health.y, 25, 25);
 		//ctx.drawImage(healthImage, health2.x, health2.y, 25, 25);
 	}
@@ -352,7 +339,7 @@ var render = function() {
 	//	ctx.drawImage(weaponImage, 20, 550, 40, 40);
 	}
 
-	// Score
+	// Display player stats.
 	ctx.fillStyle = "rgb(0, 255, 0)";
 	ctx.font = "24px Helvetica";
 	ctx.textAlign = "left";
