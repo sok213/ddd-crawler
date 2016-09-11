@@ -8,7 +8,8 @@ var DungeonGame = React.createClass({
 				weapon: 'None',
 				health: 100,
 				maxDMG: 15,
-			level: 1
+				level: 1,
+				dead: false
 			},
 			monster: {
 				health: 100,
@@ -35,11 +36,16 @@ var DungeonGame = React.createClass({
 			self = this.state,
 			healthSound = document.createElement('AUDIO'),
 			levelUpSound = document.createElement('AUDIO'),
-			weaponEquipSound = document.createElement('AUDIO');
+			weaponEquipSound = document.createElement('AUDIO'),
+			deathSound = document.createElement('AUDIO'),
+			attackSound = document.createElement('AUDIO');
 
 		healthSound.src = "assets/sounds/health.mp3";
 		levelUpSound.src = "assets/sounds/levelup.mp3";
 		weaponEquipSound.src = "assets/sounds/weapon.mp3";
+		deathSound.src = "assets/sounds/death.mp3";
+		attackSound.src - "assets/sounds/attack.mp3";
+
 
 
 		// Disables anti-aliasing for sharp sprites.
@@ -259,20 +265,26 @@ var DungeonGame = React.createClass({
 				heroImage.src = "assets/images/blocky/blocky_right.png"
 			}
 
-			// Are they touching?
+			// Detect if player is touching a monster.
 			if(
 				self.hero.x <= (self.monster.x + 32)
 				&& self.monster.x <= (self.hero.x + 32)
 				&& self.hero.y <= (self.monster.y + 32)
 				&& self.monster.y <= (self.hero.y + 32)
 			) {
+				attackSound.play();
 				self.hero.health -= 15;
 				console.log("Player has encountered a demon.")
 			}
 
 			// When player runs out of health.
 			if(self.hero.health <= 0) {
-				console.log('Player has died.');
+				if(self.hero.dead === false) {
+					console.log('Player has died.');
+					deathSound.play();
+					self.hero.health = 0;
+					self.hero.dead = true;
+				} 
 				self.hero.health = 0;
 			}
 
