@@ -16,8 +16,9 @@ var DungeonGame = React.createClass({
 				y: 0
 			},
 			weapon: {
-				x:0,
-				y:0
+				x: 40,
+				y: 600,
+				status: false
 			},
 			healthPack: {
 				x: 0,
@@ -29,11 +30,16 @@ var DungeonGame = React.createClass({
 
 	initializeGame: function() {
 		console.log("initializeGame function started.");
-		var canvas = document.getElementById('gameCanvas');
-		var ctx = canvas.getContext('2d');
-		var healthSound = document.createElement('AUDIO');
+		var canvas = document.getElementById('gameCanvas'),
+			ctx = canvas.getContext('2d'),
+			self = this.state,
+			healthSound = document.createElement('AUDIO'),
+			levelUpSound = document.createElement('AUDIO'),
+			weaponEquipSound = document.createElement('AUDIO');
+
 		healthSound.src = "assets/sounds/health.mp3";
-		var self = this.state;
+		levelUpSound.src = "assets/sounds/levelup.mp3";
+		weaponEquipSound.src = "assets/sounds/weapon.mp3";
 
 
 		// Disables anti-aliasing for sharp sprites.
@@ -66,8 +72,6 @@ var DungeonGame = React.createClass({
 			weaponReady = true;
 		};
 		weaponImage.src = "assets/images/hammer.png";
-
-
 
 		// Health pack image
 		var healthReady = false;
@@ -115,6 +119,7 @@ var DungeonGame = React.createClass({
 
 		// Player movement and wall collsion rules.
 		var playerMovement = function(modifier) {
+			// Key press rules and canvas walls collisions.
 			if(self.hero.y < 3 && self.hero.x < -5) {
 				// Player holding down
 				if(40 in keysDown) {
@@ -235,6 +240,25 @@ var DungeonGame = React.createClass({
 				}
 			}
 
+			// Player animation
+
+			// Player holding up
+			if(38 in keysDown) { 
+				heroImage.src = "assets/images/blocky/blocky_examine.png" 
+			}
+			// Player holding down
+			if(40 in keysDown) {
+				heroImage.src = "assets/images/blocky/blocky.png"
+			}
+			// Player holding left
+			if(37 in keysDown) {
+				heroImage.src = "assets/images/blocky/blocky_left.png"
+			}
+			// Player holding right
+			if(39 in keysDown) {
+				heroImage.src = "assets/images/blocky/blocky_right.png"
+			}
+
 			// Are they touching?
 			if(
 				self.hero.x <= (self.monster.x + 32)
@@ -272,6 +296,19 @@ var DungeonGame = React.createClass({
 					console.log('Player health is full.')
 				}
 			}
+
+			// Detect if player picked up weapon.
+			if(self.hero.x <= (self.weapon.x + 32)
+				&& self.weapon.x <= (self.hero.x + 32)
+				&& self.hero.y <= (self.weapon.y + 32)
+				&& self.weapon.y <= (self.hero.y + 32)
+				&& self.weapon.status === false
+			) {
+				weaponEquipSound.play();
+				self.hero.weapon = 'Iron Hammer';
+				self.weapon.status = true;
+				console.log('Player has picked up Iron Hammer!');
+			}
 		};
 
 		/*
@@ -301,11 +338,10 @@ var DungeonGame = React.createClass({
 
 			if(healthReady && self.healthPack.status === false) {
 				ctx.drawImage(healthImage, self.healthPack.x, self.healthPack.y, 25, 25);
-				//ctx.drawImage(healthImage, health2.x, health2.y, 25, 25);
 			}
 
-			if(weaponReady) {
-			//	ctx.drawImage(weaponImage, 20, 550, 40, 40);
+			if(weaponReady && self.weapon.status === false) {
+				ctx.drawImage(weaponImage, self.weapon.x, self.weapon.y, weaponImage.width * 2, weaponImage.height * 2);
 			}
 
 			// Display player stats.
