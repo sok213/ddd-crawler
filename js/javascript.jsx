@@ -2,7 +2,7 @@ var DungeonGame = React.createClass({
 	getInitialState: function() {
 		return {
 			hero: {
-				speed: 256, // movement in pixels per second
+				speed: 120, // movement in pixels per second
 				x: 0,
 				y: 0,
 				weapon: 'None',
@@ -39,6 +39,11 @@ var DungeonGame = React.createClass({
 			weaponEquipSound = document.createElement('AUDIO'),
 			deathSound = document.createElement('AUDIO'),
 			attackSound = document.createElement('AUDIO');
+		var collision = false,
+			left = false,
+			right = false,
+			down = false,
+			up = false;
 
 		healthSound.src = "assets/sounds/health.mp3";
 		levelUpSound.src = "assets/sounds/levelup.mp3";
@@ -49,9 +54,7 @@ var DungeonGame = React.createClass({
 
 
 		// Disables anti-aliasing for sharp sprites.
-		ctx.webkitImageSmoothingEnabled = false;
-		ctx.mozImageSmoothingEnabled = false;
-		ctx.imageSmoothingEnabled = false; /// future
+		ctx.imageSmoothingEnabled = false;
 
 		document.body.appendChild(canvas);
 
@@ -126,127 +129,48 @@ var DungeonGame = React.createClass({
 		// Player movement and wall collsion rules.
 		var playerMovement = function(modifier) {
 			// Key press rules and canvas walls collisions.
-			if(self.hero.y < 3 && self.hero.x < -5) {
-				// Player holding down
-				if(40 in keysDown) {
-					self.hero.y += self.hero.speed * modifier;
-				}
-				// Player holding right
-				if(39 in keysDown) {
-					self.hero.x += self.hero.speed * modifier;
-				}
-			} else if(self.hero.y < 660 && self.hero.x < -5) {
-				// Player holding up
-				if(38 in keysDown) { 
-					self.hero.y -= self.hero.speed * modifier; 
-				}
-				// Player holding right
-				if(39 in keysDown) {
-					self.hero.x += self.hero.speed * modifier;
-				}
-				// Player holding down
-				if(40 in keysDown) {
-					self.hero.y += self.hero.speed * modifier;
-				}
-			} else if(self.hero.y > 660 && self.hero.x > 1170) {
-				// Player holding up
-				if(38 in keysDown) { 
-					self.hero.y -= self.hero.speed * modifier; 
-				}
-				// Player holding left
-				if(37 in keysDown) {
-					self.hero.x -= self.hero.speed * modifier;
-				}
-			} else if(self.hero.y > 660 && self.hero.x < -5) {
-				// Player holding up
-				if(38 in keysDown) { 
-					self.hero.y -= self.hero.speed * modifier; 
-				}
-				// Player holding right
-				if(39 in keysDown) {
-					self.hero.x += self.hero.speed * modifier;
-				}
-			} else if(self.hero.y < 3 && self.hero.x > 1170) {
-				// Player holding down
-				if(40 in keysDown) {
-					self.hero.y += self.hero.speed * modifier;
-				}
-				// Player holding left
-				if(37 in keysDown) {
-					self.hero.x -= self.hero.speed * modifier;
-				}
-			} else if(self.hero.y < 3){
-				// Player holding down
-				if(40 in keysDown) {
-					self.hero.y += self.hero.speed * modifier;
-				}
-				// Player holding left
-				if(37 in keysDown) {
-					self.hero.x -= self.hero.speed * modifier;
-				}
-				// Player holding right
-				if(39 in keysDown) {
-					self.hero.x += self.hero.speed * modifier;
-				}
-			} else if(self.hero.y > 660) {
-				// Player holding up
-				if(38 in keysDown) { 
-					self.hero.y -= self.hero.speed * modifier; 
-				}
-				// Player holding left
-				if(37 in keysDown) {
-					self.hero.x -= self.hero.speed * modifier;
-				}
-				// Player holding right
-				if(39 in keysDown) {
-					self.hero.x += self.hero.speed * modifier;
-				}
-			} else if(self.hero.x < -5) {
-				// Player holding up
-				if(38 in keysDown) { 
-					self.hero.y -= self.hero.speed * modifier; 
-				}
-				// Player holding down
-				if(40 in keysDown) {
-					self.hero.y += self.hero.speed * modifier;
-				}
-				// Player holding right
-				if(39 in keysDown) {
-					self.hero.x += self.hero.speed * modifier;
-				}
-			} else if(self.hero.x > 1170) {
-				// Player holding up
-				if(38 in keysDown) { 
-					self.hero.y -= self.hero.speed * modifier; 
-				}
-				// Player holding down
-				if(40 in keysDown) {
-					self.hero.y += self.hero.speed * modifier;
-				}
-				// Player holding left
-				if(37 in keysDown) {
-					self.hero.x -= self.hero.speed * modifier;
-				}
-			} else {
-				// Player holding up
-				if(38 in keysDown) { 
-					self.hero.y -= self.hero.speed * modifier; 
-				}
-				// Player holding down
-				if(40 in keysDown) {
-					self.hero.y += self.hero.speed * modifier;
-				}
-				// Player holding left
-				if(37 in keysDown) {
-					self.hero.x -= self.hero.speed * modifier;
-				}
-				// Player holding right
-				if(39 in keysDown) {
-					self.hero.x += self.hero.speed * modifier;
-				}
+			console.log(self.hero.y)
+			// Player holding up
+			if(38 in keysDown) { 
+				self.hero.y -= self.hero.speed * modifier; 
+			}
+			// Player holding down
+			if(40 in keysDown) {
+				self.hero.y += self.hero.speed * modifier;
+			}
+			// Player holding left
+			if(37 in keysDown) {
+				self.hero.x -= self.hero.speed * modifier;
+			}
+			// Player holding right
+			if(39 in keysDown) {
+				self.hero.x += self.hero.speed * modifier;
 			}
 
-			// Player animation
+			/* WALL COLLISION RULES
+			*--------------------------------------------
+			*/
+
+			// Player reaches left wall
+			if(self.hero.x <= -7) {
+				self.hero.x = -7;
+			}
+			// Player reaches right wall
+			if(self.hero.x >= 1168) {
+				self.hero.x = 1168;
+			}
+			// Player reaches top wall
+			if(self.hero.y <= -0.37) {
+				self.hero.y = -0.37;
+			}
+			// Player reaches bottom wall
+			if(self.hero.y >= 663.73) {
+				self.hero.y = 663.73;
+			}
+
+			/* PLAYER ANIMATIONS
+			*--------------------------------------------
+			*/
 
 			// Player holding up
 			if(38 in keysDown) { 
@@ -272,9 +196,7 @@ var DungeonGame = React.createClass({
 				&& self.hero.y <= (self.monster.y + 32)
 				&& self.monster.y <= (self.hero.y + 32)
 			) {
-				attackSound.play();
-				self.hero.health -= 15;
-				console.log("Player has encountered a demon.")
+				console.log("Player has encountered a demon.");
 			}
 
 			// When player runs out of health.
@@ -393,8 +315,8 @@ var DungeonGame = React.createClass({
 	render: function() {
 	    return <div>
     	<div className="logo"><img src="logo.png"></img></div>
-		<canvas id='gameCanvas' height='700' width='1200' ></canvas>
-    </div>;
+		<canvas id='gameCanvas' height='700' width='1200'></canvas>
+    </div>
 	}
 });
 
