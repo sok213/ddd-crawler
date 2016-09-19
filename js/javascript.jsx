@@ -45,6 +45,9 @@ var DungeonGame = React.createClass({
 			down = false,
 			up = false;
 
+			var playerX,
+				playerY; 
+
 		healthSound.src = "assets/sounds/health.mp3";
 		levelUpSound.src = "assets/sounds/levelup.mp3";
 		weaponEquipSound.src = "assets/sounds/weapon.mp3";
@@ -128,8 +131,11 @@ var DungeonGame = React.createClass({
 
 		// Player movement and wall collsion rules.
 		var playerMovement = function(modifier) {
-			// Key press rules and canvas walls collisions.
-			console.log(self.hero.y)
+
+			/* KEY PRESS & COLLISION RULES
+			*--------------------------------------------
+			*/
+		
 			// Player holding up
 			if(38 in keysDown) { 
 				self.hero.y -= self.hero.speed * modifier; 
@@ -197,6 +203,18 @@ var DungeonGame = React.createClass({
 				&& self.monster.y <= (self.hero.y + 32)
 			) {
 				console.log("Player has encountered a demon.");
+				if(!playerX) {
+					console.log('???')
+					playerX = self.hero.x;
+					playerY = self.hero.y;
+				}
+				self.hero.x = playerX;
+				self.hero.y = playerY;
+
+				console.log(self.hero.x)
+			} else {
+				playerX = undefined;
+				playerY = undefined;
 			}
 
 			// When player runs out of health.
