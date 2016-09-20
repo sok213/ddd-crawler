@@ -6,14 +6,14 @@ var DungeonGame = React.createClass({
 				x: 0,
 				y: 0,
 				weapon: 'None',
-				health: 100,
-				maxDMG: 5,
+				health: 150,
+				maxDMG: 1,
 				level: 1,
 				dead: false
 			},
 			monster: {
 				health: 100,
-				maxDMG: 1,
+				maxDMG: 2,
 				level: 1,
 				dead: false,
 				x: 0,
@@ -107,7 +107,7 @@ var DungeonGame = React.createClass({
 		monsterImage.onload = function () {
 			monsterReady = true;
 		};
-		monsterImage.src = "assets/images/demon2.png";
+		monsterImage.src = "assets/images/demonLevel1.png";
 
 		// Handle keyboard controls.
 		var keysDown = {};
@@ -257,13 +257,13 @@ var DungeonGame = React.createClass({
 				&& self.healthPack.y <= (self.hero.y + 32)
 				&& self.healthPack.status === false
 			) {
-				if(self.hero.health < 100) {
+				if(self.hero.health < 150) {
 					healthSound.play();
 					self.healthPack.status = true;
-					self.hero.health += 25;
+					self.hero.health += 50;
 
-					if(self.hero.health > 100) {
-						self.hero.health = 100;
+					if(self.hero.health > 150) {
+						self.hero.health = 150;
 					}
 					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
 				} else {
@@ -280,6 +280,7 @@ var DungeonGame = React.createClass({
 			) {
 				weaponEquipSound.play();
 				self.hero.weapon = 'Iron Hammer';
+				self.hero.maxDMG = 20;
 				self.weapon.status = true;
 				console.log('Player has picked up Iron Hammer!');
 			}
@@ -332,7 +333,7 @@ var DungeonGame = React.createClass({
 			ctx.font = "24px Helvetica";
 			ctx.textAlign = "left";
 			ctx.textBaseline = "top";
-			ctx.fillText("HP: "+self.hero.health+'/100', 20, 10);
+			ctx.fillText("HP: "+self.hero.health+'/150', 20, 10);
 
 			ctx.fillStyle = "rgb(255, 255, 0)";
 			ctx.fillText("Level: "+self.hero.level, 180, 10);
