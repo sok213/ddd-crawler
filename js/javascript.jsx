@@ -292,19 +292,35 @@ var DungeonGame = React.createClass({
 
 			// Player holding up
 			if(38 in keysDown) { 
-				heroImage.src = "assets/images/blocky/blocky_examine.png" 
+				if(self.hero.weapon == "Iron Hammer") {
+					heroImage.src = "assets/images/blocky/blocky_examineHam.png";
+				} else {
+					heroImage.src = "assets/images/blocky/blocky_examine.png";
+				} 
 			}
 			// Player holding down
 			if(40 in keysDown) {
-				heroImage.src = "assets/images/blocky/blocky.png"
+				if(self.hero.weapon == "Iron Hammer") {
+					heroImage.src = "assets/images/blocky/blockyHam.png";
+				} else {
+					heroImage.src = "assets/images/blocky/blocky.png";
+				}
 			}
 			// Player holding left
 			if(37 in keysDown) {
-				heroImage.src = "assets/images/blocky/blocky_left.png"
+				if(self.hero.weapon == "Iron Hammer") {
+					heroImage.src = "assets/images/blocky/blocky_leftHam.png";
+				} else {
+					heroImage.src = "assets/images/blocky/blocky_left.png";
+				}
 			}
 			// Player holding right
 			if(39 in keysDown) {
-				heroImage.src = "assets/images/blocky/blocky_right.png"
+				if(self.hero.weapon == "Iron Hammer") {
+					heroImage.src = "assets/images/blocky/blocky_rightHam.png";
+				} else {
+					heroImage.src = "assets/images/blocky/blocky_right.png";
+				}
 			}
 
 			// Detect if player is touching a monster.
