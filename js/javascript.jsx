@@ -12,6 +12,11 @@ var DungeonGame = React.createClass({
 				level: 1,
 				dead: false
 			},
+			skull: {
+				taken: false,
+				x: 1058,
+				y: 60
+			},
 			monster: {
 				health: 100,
 				maxDMG: 1,
@@ -161,6 +166,14 @@ var DungeonGame = React.createClass({
 			weaponReady = true;
 		};
 		weaponImage.src = "assets/images/hammer.png";
+
+		// Skull image
+		var skullReady = false;
+		var skullImage = new Image();
+		skullImage.onload = function () {
+			skullReady = true;
+		};
+		skullImage.src = "assets/images/goldskull.png";
 
 		// Health pack image
 		var healthReady = false;
@@ -734,6 +747,11 @@ var DungeonGame = React.createClass({
 			// Draw weapon
 			if(weaponReady && self.weapon.status === false) {
 				ctx.drawImage(weaponImage, self.weapon.x, self.weapon.y, weaponImage.width * 2, weaponImage.height * 2);
+			}
+
+			// Draw Golden Skull
+			if(skullReady) {
+				ctx.drawImage(skullImage, self.skull.x, self.skull.y, skullImage.width * 1.3, skullImage.height * 1.3);
 			}
 
 
