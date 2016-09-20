@@ -7,12 +7,15 @@ var DungeonGame = React.createClass({
 				y: 0,
 				weapon: 'None',
 				health: 100,
-				maxDMG: 15,
+				maxDMG: 5,
 				level: 1,
 				dead: false
 			},
 			monster: {
 				health: 100,
+				maxDMG: 1,
+				level: 1,
+				dead: false,
 				x: 0,
 				y: 0
 			},
@@ -31,30 +34,35 @@ var DungeonGame = React.createClass({
 
 	initializeGame: function() {
 		console.log("initializeGame function started.");
-		var canvas = document.getElementById('gameCanvas'),
-			ctx = canvas.getContext('2d'),
-			self = this.state,
-			healthSound = document.createElement('AUDIO'),
-			levelUpSound = document.createElement('AUDIO'),
-			weaponEquipSound = document.createElement('AUDIO'),
-			deathSound = document.createElement('AUDIO'),
-			attackSound = document.createElement('AUDIO');
-		var collision = false,
-			left = false,
-			right = false,
-			down = false,
-			up = false;
 
-			var playerX,
-				playerY; 
+		// Context variables
+		var canvas = document.getElementById('gameCanvas'),
+		ctx = canvas.getContext('2d'),
+		self = this.state;
+
+		// Sound asset variables
+		var healthSound = document.createElement('AUDIO'),
+		levelUpSound = document.createElement('AUDIO'),
+		weaponEquipSound = document.createElement('AUDIO'),
+		deathSound = document.createElement('AUDIO'),
+		attackSound = document.createElement('AUDIO'),
+		killSound = document.createElement('AUDIO');
+
+		// Game Mechanics Variables
+		var collision = false,
+		left = false,
+		right = false,
+		down = false,
+		up = false,
+		playerY,
+		playerX;
 
 		healthSound.src = "assets/sounds/health.mp3";
 		levelUpSound.src = "assets/sounds/levelup.mp3";
 		weaponEquipSound.src = "assets/sounds/weapon.mp3";
 		deathSound.src = "assets/sounds/death.mp3";
-		attackSound.src - "assets/sounds/attack.mp3";
-
-
+		attackSound.src = "assets/sounds/attack.mp3";
+		killSound.src = "assets/sounds/kill.mp3";
 
 		// Disables anti-aliasing for sharp sprites.
 		ctx.imageSmoothingEnabled = false;
@@ -202,16 +210,30 @@ var DungeonGame = React.createClass({
 				&& self.hero.y <= (self.monster.y + 32)
 				&& self.monster.y <= (self.hero.y + 32)
 			) {
-				console.log("Player has encountered a demon.");
+				attackSound.play();
+				console.log("Player has encountered a demon.")
 				if(!playerX) {
-					console.log('???')
 					playerX = self.hero.x;
 					playerY = self.hero.y;
 				}
+
 				self.hero.x = playerX;
 				self.hero.y = playerY;
 
-				console.log(self.hero.x)
+				// Combat Algorithm.
+				if(
+					self.monster.health > 0 && (39 in keysDown || 37 in keysDown
+					|| 40 in keysDown || 38 in keysDown)
+				) {
+					var playerAttack = Math.floor((Math.random() * (self.hero.maxDMG * self.hero.level)) + 5);
+					var monsterAttack = Math.floor((Math.random() * (self.monster.maxDMG * self.monster.level)) + 5);
+
+					self.monster.health -= playerAttack;
+					self.hero.health -= monsterAttack;
+
+					console.log('Monster HP: ' + self.monster.health)
+					console.log('Player HP: ' + self.hero.health)
+				}
 			} else {
 				playerX = undefined;
 				playerY = undefined;
@@ -280,20 +302,29 @@ var DungeonGame = React.createClass({
 				ctx.drawImage(bgImage, 0, 0);
 			}
 
-			if(heroReady) {
-				ctx.drawImage(heroImage, self.hero.x, self.hero.y, heroImage.width * 2.2, heroImage.height * 2.2);
-			}
-
-			if(monsterReady) {
-				ctx.drawImage(monsterImage, self.monster.x, self.monster.y, monsterImage.width / 8, monsterImage.height / 8);
-			}
-
 			if(healthReady && self.healthPack.status === false) {
 				ctx.drawImage(healthImage, self.healthPack.x, self.healthPack.y, 25, 25);
 			}
 
+			if(heroReady) {
+				ctx.drawImage(heroImage, self.hero.x, self.hero.y, heroImage.width * 2.2, heroImage.height * 2.2);
+			}
+
+			if(monsterReady && self.monster.health > 0) {
+				ctx.drawImage(monsterImage, self.monster.x, self.monster.y, monsterImage.width / 8, monsterImage.height / 8);
+			}
+
 			if(weaponReady && self.weapon.status === false) {
 				ctx.drawImage(weaponImage, self.weapon.x, self.weapon.y, weaponImage.width * 2, weaponImage.height * 2);
+			}
+
+			if(self.monster.health <= 0) {
+				self.monster.y = null;
+				self.monster.x = null;
+				if(self.monster.dead === false) {
+					killSound.play();
+					self.monster.dead = true;
+				}
 			}
 
 			// Display player stats.
