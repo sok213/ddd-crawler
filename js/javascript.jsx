@@ -115,7 +115,8 @@ var DungeonGame = React.createClass({
 		down = false,
 		up = false,
 		playerY,
-		playerX;
+		playerX,
+		leveledUp = false;
 
 		healthSound.src = "assets/sounds/health.mp3";
 		levelUpSound.src = "assets/sounds/levelup.mp3";
@@ -492,6 +493,19 @@ var DungeonGame = React.createClass({
 				playerY = undefined;
 			}
 
+			// Level up player if all enemies are dead
+			if(
+				self.monster.health <= 0 && self.monster2.health <= 0
+				&& self.monster3.health <= 0 && self.monster4.health <= 0
+				&& self.monster5.health <= 0 && self.monster6.health <= 0
+			) {
+				if(leveledUp === false) {
+					self.hero.level = 2;
+					levelUpSound.play();
+					leveledUp = true;
+				}
+			}
+
 			// When player runs out of health.
 			if(self.hero.health <= 0) {
 				if(self.hero.dead === false) {
@@ -758,6 +772,10 @@ var DungeonGame = React.createClass({
 			ctx.fillText("Level: "+self.hero.level, 180, 10);
 			ctx.fillStyle = "rgb(26, 198, 255)";
 			ctx.fillText("Weapon: "+self.hero.weapon, 290, 10);
+
+		}
+
+		var gameOver = function() {
 
 		}
 
