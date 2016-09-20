@@ -7,6 +7,7 @@ var DungeonGame = React.createClass({
 				y: 0,
 				weapon: 'None',
 				health: 150,
+				maxHealth: 150,
 				maxDMG: 1,
 				level: 1,
 				dead: false
@@ -735,6 +736,8 @@ var DungeonGame = React.createClass({
 				ctx.drawImage(weaponImage, self.weapon.x, self.weapon.y, weaponImage.width * 2, weaponImage.height * 2);
 			}
 
+
+			// Monster death detection for all six monsters.
 			if(self.monster.health <= 0) {
 				self.monster.y = null;
 				self.monster.x = null;
@@ -789,12 +792,18 @@ var DungeonGame = React.createClass({
 				}
 			}
 
+			// Player level up HP boost
+			if(self.hero.level == 2) {
+				self.hero.health = 200;
+				self.hero.maxHealth = 200;
+			}
+
 			// Display player stats.
 			ctx.fillStyle = "rgb(0, 255, 0)";
 			ctx.font = "24px Helvetica";
 			ctx.textAlign = "left";
 			ctx.textBaseline = "top";
-			ctx.fillText("HP: "+self.hero.health+'/150', 20, 710);
+			ctx.fillText("HP: "+self.hero.health+'/'+self.hero.maxHealth, 20, 710);
 
 			ctx.fillStyle = "rgb(255, 255, 0)";
 			ctx.fillText("Level: "+self.hero.level, 180, 710);
