@@ -13,8 +13,48 @@ var DungeonGame = React.createClass({
 			},
 			monster: {
 				health: 100,
-				maxDMG: 2,
+				maxDMG: 1,
 				level: 1,
+				dead: false,
+				x: 0,
+				y: 0
+			},
+			monster2: {
+				health: 100,
+				maxDMG: 1,
+				level: 1,
+				dead: false,
+				x: 0,
+				y: 0
+			},
+			monster3: {
+				health: 100,
+				maxDMG: 2,
+				level: 2,
+				dead: false,
+				x: 0,
+				y: 0
+			},
+			monster4: {
+				health: 100,
+				maxDMG: 2,
+				level: 2,
+				dead: false,
+				x: 0,
+				y: 0
+			},
+			monster5: {
+				health: 100,
+				maxDMG: 3,
+				level: 3,
+				dead: false,
+				x: 0,
+				y: 0
+			},
+			monster6: {
+				health: 100,
+				maxDMG: 3,
+				level: 3,
 				dead: false,
 				x: 0,
 				y: 0
@@ -25,6 +65,26 @@ var DungeonGame = React.createClass({
 				status: false
 			},
 			healthPack: {
+				x: 0,
+				y: 0,
+				status: false
+			},
+			healthPack2: {
+				x: 0,
+				y: 0,
+				status: false
+			},
+			healthPack3: {
+				x: 0,
+				y: 0,
+				status: false
+			},
+			healthPack4: {
+				x: 0,
+				y: 0,
+				status: false
+			},
+			healthPack5: {
 				x: 0,
 				y: 0,
 				status: false
@@ -109,6 +169,22 @@ var DungeonGame = React.createClass({
 		};
 		monsterImage.src = "assets/images/demonLevel1.png";
 
+		// Monster image 2
+		var monsterReady2 = false;
+		var monsterImage2 = new Image();
+		monsterImage2.onload = function () {
+			monsterReady2 = true;
+		};
+		monsterImage2.src = "assets/images/demonLevel2.png";
+
+		// Monster image 3
+		var monsterReady3 = false;
+		var monsterImage3 = new Image();
+		monsterImage3.onload = function () {
+			monsterReady3 = true;
+		};
+		monsterImage3.src = "assets/images/demon2.png";
+
 		// Handle keyboard controls.
 		var keysDown = {};
 
@@ -132,9 +208,36 @@ var DungeonGame = React.createClass({
 			self.monster.x = 32 + (Math.random() * (canvas.width - 64));
 			self.monster.y = 32 + (Math.random() * (canvas.height - 64));
 
+			self.monster2.x = 32 + (Math.random() * (canvas.width - 64));
+			self.monster2.y = 32 + (Math.random() * (canvas.height - 64));
+
+			self.monster3.x = 32 + (Math.random() * (canvas.width - 64));
+			self.monster3.y = 32 + (Math.random() * (canvas.height - 64));
+
+			self.monster4.x = 32 + (Math.random() * (canvas.width - 64));
+			self.monster4.y = 32 + (Math.random() * (canvas.height - 64));
+
+			self.monster5.x = 32 + (Math.random() * (canvas.width - 64));
+			self.monster5.y = 32 + (Math.random() * (canvas.height - 64));
+
+			self.monster6.x = 32 + (Math.random() * (canvas.width - 64));
+			self.monster6.y = 32 + (Math.random() * (canvas.height - 64));
+
 			// Throw healthPack items somewhere on the screen randomly.
 			self.healthPack.x = 32 + (Math.random() * (canvas.width - 64));
 			self.healthPack.y = 32 + (Math.random() * (canvas.height - 64));
+
+			self.healthPack2.x = 32 + (Math.random() * (canvas.width - 64));
+			self.healthPack2.y = 32 + (Math.random() * (canvas.height - 64));
+
+			self.healthPack3.x = 32 + (Math.random() * (canvas.width - 64));
+			self.healthPack3.y = 32 + (Math.random() * (canvas.height - 64));
+
+			self.healthPack4.x = 32 + (Math.random() * (canvas.width - 64));
+			self.healthPack4.y = 32 + (Math.random() * (canvas.height - 64));
+
+			self.healthPack5.x = 32 + (Math.random() * (canvas.width - 64));
+			self.healthPack5.y = 32 + (Math.random() * (canvas.height - 64));
 		};
 
 		// Player movement and wall collsion rules.
@@ -234,6 +337,156 @@ var DungeonGame = React.createClass({
 					console.log('Monster HP: ' + self.monster.health)
 					console.log('Player HP: ' + self.hero.health)
 				}
+			} else if(
+				self.hero.x <= (self.monster6.x + 32)
+				&& self.monster6.x <= (self.hero.x + 32)
+				&& self.hero.y <= (self.monster6.y + 32)
+				&& self.monster6.y <= (self.hero.y + 32)
+			) {
+				attackSound.play();
+				console.log("Player has encountered a demon.")
+				if(!playerX) {
+					playerX = self.hero.x;
+					playerY = self.hero.y;
+				}
+
+				self.hero.x = playerX;
+				self.hero.y = playerY;
+
+				// Combat Algorithm.
+				if(
+					self.monster6.health > 0 && (39 in keysDown || 37 in keysDown
+					|| 40 in keysDown || 38 in keysDown)
+				) {
+					var playerAttack = Math.floor((Math.random() * (self.hero.maxDMG * self.hero.level)) + 5);
+					var monsterAttack = Math.floor((Math.random() * (self.monster6.maxDMG * self.monster6.level)) + 5);
+
+					self.monster6.health -= playerAttack;
+					self.hero.health -= monsterAttack;
+
+					console.log('Monster HP: ' + self.monster6.health)
+					console.log('Player HP: ' + self.hero.health)
+				}
+			} else if(
+				self.hero.x <= (self.monster2.x + 32)
+				&& self.monster2.x <= (self.hero.x + 32)
+				&& self.hero.y <= (self.monster2.y + 32)
+				&& self.monster2.y <= (self.hero.y + 32)
+			) {
+				attackSound.play();
+				console.log("Player has encountered a demon.")
+				if(!playerX) {
+					playerX = self.hero.x;
+					playerY = self.hero.y;
+				}
+
+				self.hero.x = playerX;
+				self.hero.y = playerY;
+
+				// Combat Algorithm.
+				if(
+					self.monster2.health > 0 && (39 in keysDown || 37 in keysDown
+					|| 40 in keysDown || 38 in keysDown)
+				) {
+					var playerAttack = Math.floor((Math.random() * (self.hero.maxDMG * self.hero.level)) + 5);
+					var monsterAttack = Math.floor((Math.random() * (self.monster2.maxDMG * self.monster2.level)) + 5);
+
+					self.monster2.health -= playerAttack;
+					self.hero.health -= monsterAttack;
+
+					console.log('Monster HP: ' + self.monster2.health)
+					console.log('Player HP: ' + self.hero.health)
+				}
+			} else if(
+				self.hero.x <= (self.monster3.x + 32)
+				&& self.monster3.x <= (self.hero.x + 32)
+				&& self.hero.y <= (self.monster3.y + 32)
+				&& self.monster3.y <= (self.hero.y + 32)
+			) {
+				attackSound.play();
+				console.log("Player has encountered a demon.")
+				if(!playerX) {
+					playerX = self.hero.x;
+					playerY = self.hero.y;
+				}
+
+				self.hero.x = playerX;
+				self.hero.y = playerY;
+
+				// Combat Algorithm.
+				if(
+					self.monster3.health > 0 && (39 in keysDown || 37 in keysDown
+					|| 40 in keysDown || 38 in keysDown)
+				) {
+					var playerAttack = Math.floor((Math.random() * (self.hero.maxDMG * self.hero.level)) + 5);
+					var monsterAttack = Math.floor((Math.random() * (self.monster3.maxDMG * self.monster3.level)) + 5);
+
+					self.monster3.health -= playerAttack;
+					self.hero.health -= monsterAttack;
+
+					console.log('Monster HP: ' + self.monster3.health)
+					console.log('Player HP: ' + self.hero.health)
+				}
+			} else if(
+				self.hero.x <= (self.monster4.x + 32)
+				&& self.monster4.x <= (self.hero.x + 32)
+				&& self.hero.y <= (self.monster4.y + 32)
+				&& self.monster4.y <= (self.hero.y + 32)
+			) {
+				attackSound.play();
+				console.log("Player has encountered a demon.")
+				if(!playerX) {
+					playerX = self.hero.x;
+					playerY = self.hero.y;
+				}
+
+				self.hero.x = playerX;
+				self.hero.y = playerY;
+
+				// Combat Algorithm.
+				if(
+					self.monster4.health > 0 && (39 in keysDown || 37 in keysDown
+					|| 40 in keysDown || 38 in keysDown)
+				) {
+					var playerAttack = Math.floor((Math.random() * (self.hero.maxDMG * self.hero.level)) + 5);
+					var monsterAttack = Math.floor((Math.random() * (self.monster4.maxDMG * self.monster4.level)) + 5);
+
+					self.monster4.health -= playerAttack;
+					self.hero.health -= monsterAttack;
+
+					console.log('Monster HP: ' + self.monster4.health)
+					console.log('Player HP: ' + self.hero.health)
+				}
+			} else if(
+				self.hero.x <= (self.monster5.x + 32)
+				&& self.monster5.x <= (self.hero.x + 32)
+				&& self.hero.y <= (self.monster5.y + 32)
+				&& self.monster5.y <= (self.hero.y + 32)
+			) {
+				attackSound.play();
+				console.log("Player has encountered a demon.")
+				if(!playerX) {
+					playerX = self.hero.x;
+					playerY = self.hero.y;
+				}
+
+				self.hero.x = playerX;
+				self.hero.y = playerY;
+
+				// Combat Algorithm.
+				if(
+					self.monster5.health > 0 && (39 in keysDown || 37 in keysDown
+					|| 40 in keysDown || 38 in keysDown)
+				) {
+					var playerAttack = Math.floor((Math.random() * (self.hero.maxDMG * self.hero.level)) + 5);
+					var monsterAttack = Math.floor((Math.random() * (self.monster.maxDMG * self.monster5.level)) + 5);
+
+					self.monster5.health -= playerAttack;
+					self.hero.health -= monsterAttack;
+
+					console.log('Monster HP: ' + self.monster5.health)
+					console.log('Player HP: ' + self.hero.health)
+				}
 			} else {
 				playerX = undefined;
 				playerY = undefined;
@@ -260,6 +513,86 @@ var DungeonGame = React.createClass({
 				if(self.hero.health < 150) {
 					healthSound.play();
 					self.healthPack.status = true;
+					self.hero.health += 50;
+
+					if(self.hero.health > 150) {
+						self.hero.health = 150;
+					}
+					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
+				} else {
+					console.log('Player health is full.')
+				}
+			}
+
+			if(self.hero.x <= (self.healthPack2.x + 32)
+				&& self.healthPack2.x <= (self.hero.x + 32)
+				&& self.hero.y <= (self.healthPack2.y + 32)
+				&& self.healthPack2.y <= (self.hero.y + 32)
+				&& self.healthPack2.status === false
+			) {
+				if(self.hero.health < 150) {
+					healthSound.play();
+					self.healthPack2.status = true;
+					self.hero.health += 50;
+
+					if(self.hero.health > 150) {
+						self.hero.health = 150;
+					}
+					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
+				} else {
+					console.log('Player health is full.')
+				}
+			}
+
+			if(self.hero.x <= (self.healthPack3.x + 32)
+				&& self.healthPack3.x <= (self.hero.x + 32)
+				&& self.hero.y <= (self.healthPack3.y + 32)
+				&& self.healthPack3.y <= (self.hero.y + 32)
+				&& self.healthPack3.status === false
+			) {
+				if(self.hero.health < 150) {
+					healthSound.play();
+					self.healthPack3.status = true;
+					self.hero.health += 50;
+
+					if(self.hero.health > 150) {
+						self.hero.health = 150;
+					}
+					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
+				} else {
+					console.log('Player health is full.')
+				}
+			}
+
+			if(self.hero.x <= (self.healthPack4.x + 32)
+				&& self.healthPack4.x <= (self.hero.x + 32)
+				&& self.hero.y <= (self.healthPack4.y + 32)
+				&& self.healthPack4.y <= (self.hero.y + 32)
+				&& self.healthPack4.status === false
+			) {
+				if(self.hero.health < 150) {
+					healthSound.play();
+					self.healthPack4.status = true;
+					self.hero.health += 50;
+
+					if(self.hero.health > 150) {
+						self.hero.health = 150;
+					}
+					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
+				} else {
+					console.log('Player health is full.')
+				}
+			}
+
+			if(self.hero.x <= (self.healthPack5.x + 32)
+				&& self.healthPack5.x <= (self.hero.x + 32)
+				&& self.hero.y <= (self.healthPack5.y + 32)
+				&& self.healthPack5.y <= (self.hero.y + 32)
+				&& self.healthPack5.status === false
+			) {
+				if(self.hero.health < 150) {
+					healthSound.play();
+					self.healthPack5.status = true;
 					self.hero.health += 50;
 
 					if(self.hero.health > 150) {
@@ -299,22 +632,63 @@ var DungeonGame = React.createClass({
 
 		// Draw everything
 		var render = function() {
+			// Draw background image
 			if(bgReady) {
 				ctx.drawImage(bgImage, 0, 0);
 			}
 
+			// Draw health packs
 			if(healthReady && self.healthPack.status === false) {
 				ctx.drawImage(healthImage, self.healthPack.x, self.healthPack.y, 25, 25);
 			}
 
+			if(healthReady && self.healthPack2.status === false) {
+				ctx.drawImage(healthImage, self.healthPack2.x, self.healthPack2.y, 25, 25);
+			}
+
+			if(healthReady && self.healthPack3.status === false) {
+				ctx.drawImage(healthImage, self.healthPack3.x, self.healthPack3.y, 25, 25);
+			}
+
+			if(healthReady && self.healthPack4.status === false) {
+				ctx.drawImage(healthImage, self.healthPack4.x, self.healthPack4.y, 25, 25);
+			}
+
+			if(healthReady && self.healthPack5.status === false) {
+				ctx.drawImage(healthImage, self.healthPack5.x, self.healthPack5.y, 25, 25);
+			}
+
+			// Draw hero
 			if(heroReady) {
 				ctx.drawImage(heroImage, self.hero.x, self.hero.y, heroImage.width * 2.2, heroImage.height * 2.2);
 			}
 
+			// Draw monsters
 			if(monsterReady && self.monster.health > 0) {
 				ctx.drawImage(monsterImage, self.monster.x, self.monster.y, monsterImage.width / 8, monsterImage.height / 8);
 			}
+			
+			if(monsterReady2 && self.monster2.health > 0) {
+				ctx.drawImage(monsterImage, self.monster2.x, self.monster2.y, monsterImage.width / 8, monsterImage.height / 8);
+			}
 
+			if(monsterReady2 && self.monster3.health > 0) {
+				ctx.drawImage(monsterImage2, self.monster3.x, self.monster3.y, monsterImage2.width / 8, monsterImage2.height / 8);
+			}
+
+			if(monsterReady3 && self.monster4.health > 0) {
+				ctx.drawImage(monsterImage2, self.monster4.x, self.monster4.y, monsterImage2.width / 8, monsterImage2.height / 8);
+			}
+
+			if(monsterReady3 && self.monster5.health > 0) {
+				ctx.drawImage(monsterImage3, self.monster5.x, self.monster5.y, monsterImage3.width / 8, monsterImage3.height / 8);
+			}
+
+			if(monsterReady && self.monster6.health > 0) {
+				ctx.drawImage(monsterImage3, self.monster6.x, self.monster6.y, monsterImage3.width / 8, monsterImage3.height / 8);
+			}
+			
+			// Draw weapon
 			if(weaponReady && self.weapon.status === false) {
 				ctx.drawImage(weaponImage, self.weapon.x, self.weapon.y, weaponImage.width * 2, weaponImage.height * 2);
 			}
@@ -325,6 +699,51 @@ var DungeonGame = React.createClass({
 				if(self.monster.dead === false) {
 					killSound.play();
 					self.monster.dead = true;
+				}
+			}
+
+			if(self.monster2.health <= 0) {
+				self.monster2.y = null;
+				self.monster2.x = null;
+				if(self.monster2.dead === false) {
+					killSound.play();
+					self.monster2.dead = true;
+				}
+			}
+
+			if(self.monster3.health <= 0) {
+				self.monster3.y = null;
+				self.monster3.x = null;
+				if(self.monster3.dead === false) {
+					killSound.play();
+					self.monster3.dead = true;
+				}
+			}
+
+			if(self.monster4.health <= 0) {
+				self.monster4.y = null;
+				self.monster4.x = null;
+				if(self.monster4.dead === false) {
+					killSound.play();
+					self.monster4.dead = true;
+				}
+			}
+
+			if(self.monster5.health <= 0) {
+				self.monster5.y = null;
+				self.monster5.x = null;
+				if(self.monster5.dead === false) {
+					killSound.play();
+					self.monster5.dead = true;
+				}
+			}
+
+			if(self.monster6.health <= 0) {
+				self.monster6.y = null;
+				self.monster6.x = null;
+				if(self.monster6.dead === false) {
+					killSound.play();
+					self.monster6.dead = true;
 				}
 			}
 
