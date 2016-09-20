@@ -136,7 +136,14 @@ var DungeonGame = React.createClass({
 		bgImage.onload = function() {
 			bgReady = true;
 		};
-		bgImage.src = "assets/images/background.png";
+		bgImage.src = "assets/images/background2.png";
+
+		var bgReady2 = false;
+		var bgImage2 = new Image();
+		bgImage2.onload = function() {
+			bgReady2 = true;
+		};
+		bgImage2.src = "assets/images/wood.jpg";
 
 		// Hero image
 		var heroReady = false;
@@ -207,38 +214,38 @@ var DungeonGame = React.createClass({
 		var generateMonster = function() {
 			// Throw the monster somewhere on the screen randomly
 			self.monster.x = 32 + (Math.random() * (canvas.width - 64));
-			self.monster.y = 32 + (Math.random() * (canvas.height - 64));
+			self.monster.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
 
 			self.monster2.x = 32 + (Math.random() * (canvas.width - 64));
-			self.monster2.y = 32 + (Math.random() * (canvas.height - 64));
+			self.monster2.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
 
 			self.monster3.x = 32 + (Math.random() * (canvas.width - 64));
-			self.monster3.y = 32 + (Math.random() * (canvas.height - 64));
+			self.monster3.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
 
 			self.monster4.x = 32 + (Math.random() * (canvas.width - 64));
-			self.monster4.y = 32 + (Math.random() * (canvas.height - 64));
+			self.monster4.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
 
 			self.monster5.x = 32 + (Math.random() * (canvas.width - 64));
-			self.monster5.y = 32 + (Math.random() * (canvas.height - 64));
+			self.monster5.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
 
 			self.monster6.x = 32 + (Math.random() * (canvas.width - 64));
-			self.monster6.y = 32 + (Math.random() * (canvas.height - 64));
+			self.monster6.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
 
 			// Throw healthPack items somewhere on the screen randomly.
 			self.healthPack.x = 32 + (Math.random() * (canvas.width - 64));
-			self.healthPack.y = 32 + (Math.random() * (canvas.height - 64));
+			self.healthPack.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
 
 			self.healthPack2.x = 32 + (Math.random() * (canvas.width - 64));
-			self.healthPack2.y = 32 + (Math.random() * (canvas.height - 64));
+			self.healthPack2.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
 
 			self.healthPack3.x = 32 + (Math.random() * (canvas.width - 64));
-			self.healthPack3.y = 32 + (Math.random() * (canvas.height - 64));
+			self.healthPack3.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
 
 			self.healthPack4.x = 32 + (Math.random() * (canvas.width - 64));
-			self.healthPack4.y = 32 + (Math.random() * (canvas.height - 64));
+			self.healthPack4.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
 
 			self.healthPack5.x = 32 + (Math.random() * (canvas.width - 64));
-			self.healthPack5.y = 32 + (Math.random() * (canvas.height - 64));
+			self.healthPack5.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
 		};
 
 		// Player movement and wall collsion rules.
@@ -662,6 +669,11 @@ var DungeonGame = React.createClass({
 
 		// Draw everything
 		var render = function() {
+			// Draw background image for stats display
+			if(bgReady2) {
+				ctx.drawImage(bgImage2, 0, 0);
+			}
+
 			// Draw background image
 			if(bgReady) {
 				ctx.drawImage(bgImage, 0, 0);
@@ -782,12 +794,12 @@ var DungeonGame = React.createClass({
 			ctx.font = "24px Helvetica";
 			ctx.textAlign = "left";
 			ctx.textBaseline = "top";
-			ctx.fillText("HP: "+self.hero.health+'/150', 20, 10);
+			ctx.fillText("HP: "+self.hero.health+'/150', 20, 710);
 
 			ctx.fillStyle = "rgb(255, 255, 0)";
-			ctx.fillText("Level: "+self.hero.level, 180, 10);
+			ctx.fillText("Level: "+self.hero.level, 180, 710);
 			ctx.fillStyle = "rgb(26, 198, 255)";
-			ctx.fillText("Weapon: "+self.hero.weapon, 290, 10);
+			ctx.fillText("Weapon: "+self.hero.weapon, 290, 710);
 
 		}
 
@@ -818,7 +830,7 @@ var DungeonGame = React.createClass({
 	render: function() {
 	    return <div>
     	<div className="logo"><img src="logo.png"></img></div>
-		<canvas id='gameCanvas' height='700' width='1200'></canvas>
+		<canvas id='gameCanvas' height='750' width='1200'></canvas>
     </div>
 	}
 });
