@@ -10,6 +10,7 @@ var DungeonGame = React.createClass({
 				maxHealth: 150,
 				maxDMG: 1,
 				level: 1,
+				key: false,
 				dead: false
 			},
 			skull: {
@@ -104,7 +105,11 @@ var DungeonGame = React.createClass({
 		// Context variables
 		var canvas = document.getElementById('gameCanvas'),
 		ctx = canvas.getContext('2d'),
-		self = this.state;
+		self = this.state,
+		noLevelNoSkull = false,
+		noLevel = false,
+		noSkull = false,
+		doorPass = false;
 
 		// Sound asset variables
 		var healthSound = document.createElement('AUDIO'),
@@ -166,6 +171,14 @@ var DungeonGame = React.createClass({
 			weaponReady = true;
 		};
 		weaponImage.src = "assets/images/hammer.png";
+
+		// Door image 
+		var doorReady = false;
+		var doorImage = new Image();
+		doorImage.onload = function () {
+			doorReady = true;
+		};
+		doorImage.src = "assets/images/door.png";
 
 		// Skull image
 		var skullReady = false;
@@ -290,6 +303,9 @@ var DungeonGame = React.createClass({
 			*--------------------------------------------
 			*/
 
+			console.log("x: "+self.hero.x);
+			console.log("y: "+self.hero.y);
+
 			// Player reaches left wall
 			if(self.hero.x <= -7) {
 				self.hero.x = -7;
@@ -305,6 +321,11 @@ var DungeonGame = React.createClass({
 			// Player reaches bottom wall
 			if(self.hero.y >= 663.73) {
 				self.hero.y = 663.73;
+			}
+
+			// WALL #1 COLLISIONS
+			if(self.hero.y >= 290 && self.hero.x >= 110) {
+				self.hero.x = 113;
 			}
 
 			/* PLAYER ANIMATIONS
@@ -668,6 +689,28 @@ var DungeonGame = React.createClass({
 				self.weapon.status = true;
 				console.log('Player has picked up Iron Hammer!');
 			}
+
+			// Detect if player is touching door.
+			if(self.hero.x <= ((canvas.width / 2.4) + 32)
+				&& canvas.width / 2.4 <= (self.hero.x + 32)
+				&& self.hero.y <= (0 + 32)
+				&& 0 <= (self.hero.y + 32)
+			) {
+				if(self.hero.key === false && self.hero.level < 2) {
+					console.log('you are touching the door.')
+					noLevelNoSkull = true;
+				} else if(self.hero.key == true && self.hero.level < 2) {
+					noLevel = true;
+				} else if(self.hero.key === false && self.hero.level == 2) {
+					noSkull = true;
+				} else if(self.hero.key == true & self.hero.level == 2) {
+					doorPass = true;
+				}
+			} else {
+				noLevelNoSkull = false;
+				noLevel = false;
+				noSkull = false;
+			}
 		};
 
 		/*
@@ -691,6 +734,11 @@ var DungeonGame = React.createClass({
 			// Draw background image
 			if(bgReady) {
 				ctx.drawImage(bgImage, 0, 0);
+			}
+
+			// Draw door
+			if(doorReady) {
+				ctx.drawImage(doorImage, canvas.width / 2.4, 0, doorImage.width * 2, doorImage.height * 2);
 			}
 
 			// Draw health packs
@@ -816,6 +864,30 @@ var DungeonGame = React.createClass({
 				self.hero.maxHealth = 200;
 			}
 
+			if(noLevelNoSkull == true) {
+				ctx.fillStyle = "rgb(255, 26, 26)";
+				ctx.font = "20px Helvetica";
+				ctx.textAlign = "left";
+				ctx.textBaseline = "top";
+				ctx.fillText("Message: Door is locked! Requires Level 2 and Golden Skull to unlock!", 500, 714);
+			}
+
+			if(noLevel == true) {
+				ctx.fillStyle = "rgb(255, 26, 26)";
+				ctx.font = "20px Helvetica";
+				ctx.textAlign = "left";
+				ctx.textBaseline = "top";
+				ctx.fillText("Message: Door is locked! Requires Level 2 to unlock!", 500, 714);
+			}
+
+			if(noSkull == true) {
+				ctx.fillStyle = "rgb(255, 26, 26)";
+				ctx.font = "20px Helvetica";
+				ctx.textAlign = "left";
+				ctx.textBaseline = "top";
+				ctx.fillText("Message: Door is locked! Requires Golden Skull to unlock!", 550, 714);
+			}
+
 			// Display player stats.
 			ctx.fillStyle = "rgb(0, 255, 0)";
 			ctx.font = "24px Helvetica";
@@ -827,7 +899,6 @@ var DungeonGame = React.createClass({
 			ctx.fillText("Level: "+self.hero.level, 180, 710);
 			ctx.fillStyle = "rgb(26, 198, 255)";
 			ctx.fillText("Weapon: "+self.hero.weapon, 290, 710);
-
 		}
 
 		var gameOver = function() {
