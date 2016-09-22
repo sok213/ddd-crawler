@@ -6,27 +6,8 @@ body { text-align: center; }
 	margin-top: 10px;
 }
 
-button {
-	position: relative;
-	height: 43px;
-	width: 43px;
-	top: 668px;
-	left: 575px;
-	text-align: center;
-	background-color: darkorange;
-	border: thin solid yellow;
-	color: yellow;
-	z-index: 1;
-	outline: none;
-}
-
-button:hover {
-	border-color: lightpink;
-	color: #AF4FAF;
-}
-
 #gameCanvas {
 	position: relative;
 	background-color: $canvas-color;
-	margin-top: -80px;
+	margin-top: -50px;
 }
