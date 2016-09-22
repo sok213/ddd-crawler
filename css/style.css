@@ -2,11 +2,18 @@ body {
   text-align: center; }
 
 .logo {
-  margin-top: 10px; }
+  margin-top: 5px; }
 
 #gameCanvas {
   position: relative;
   background-color: black;
   margin-top: -50px; }
+
+h4 {
+  margin-top: 710px;
+  float: center;
+  width: 100%;
+  position: fixed;
+  color: #7B7B7B; }
 
 /*# sourceMappingURL=style.css.map */
