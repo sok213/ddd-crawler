@@ -951,7 +951,7 @@ var DungeonGame = React.createClass({
 	render: function() {
 	    return <div>
     	<div className="logo"><img src="logo.png"></img></div>
-    	<button><i className="fa fa-low-vision" aria-hidden="true"></i></button>
+    	<button>Light</button>
 		<canvas id='gameCanvas' height='750' width='1200'></canvas>
     </div>
 	}
