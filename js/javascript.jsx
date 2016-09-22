@@ -109,7 +109,8 @@ var DungeonGame = React.createClass({
 		noLevelNoSkull = false,
 		noLevel = false,
 		noSkull = false,
-		doorPass = false;
+		doorPass = false,
+		healthFull = false;
 
 		// Sound asset variables
 		var healthSound = document.createElement('AUDIO'),
@@ -149,6 +150,7 @@ var DungeonGame = React.createClass({
 		};
 		bgImage.src = "assets/images/background2.png";
 
+		// Bottom bar image
 		var bgReady2 = false;
 		var bgImage2 = new Image();
 		bgImage2.onload = function() {
@@ -324,8 +326,12 @@ var DungeonGame = React.createClass({
 			}
 
 			// WALL #1 COLLISIONS
-			if(self.hero.y >= 290 && self.hero.x >= 110) {
-				self.hero.x = 113;
+			if(self.hero.y >= 280 && self.hero.x >= 118 && self.hero.x <= 130) {
+				self.hero.x = 118;
+			} else if(self.hero.y >= 276 && self.hero.x >= 119 && self.hero.x <= 165 && self.hero.y <= 295) {
+				self.hero.y = 276; 
+			} else if(self.hero.y >= 276 && self.hero.x <= 165 && self.hero.x >= 120) {
+				self.hero.x = 165;
 			}
 
 			/* PLAYER ANIMATIONS
@@ -613,7 +619,10 @@ var DungeonGame = React.createClass({
 					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
 				} else {
 					console.log('Player health is full.')
+					healthFull = true;
 				}
+			} else {
+				healthFull = false;
 			}
 
 			if(self.hero.x <= (self.healthPack3.x + 32)
@@ -633,7 +642,10 @@ var DungeonGame = React.createClass({
 					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
 				} else {
 					console.log('Player health is full.')
+					healthFull = true;
 				}
+			} else {
+				healthFull = false;
 			}
 
 			if(self.hero.x <= (self.healthPack4.x + 32)
@@ -652,8 +664,11 @@ var DungeonGame = React.createClass({
 					}
 					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
 				} else {
-					console.log('Player health is full.')
+					console.log('Player health is full.');
+					healthFull = true;
 				}
+			} else {
+				healthFull = false;
 			}
 
 			if(self.hero.x <= (self.healthPack5.x + 32)
@@ -672,8 +687,11 @@ var DungeonGame = React.createClass({
 					}
 					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
 				} else {
-					console.log('Player health is full.')
+					console.log('Player health is full.');
+					healthFull = true;
 				}
+			} else {
+				healthFull = false;
 			}
 
 			// Detect if player picked up weapon.
@@ -856,6 +874,15 @@ var DungeonGame = React.createClass({
 					killSound.play();
 					self.monster6.dead = true;
 				}
+			}
+
+			// If health is full while touching a health pack.
+			if(healthFull == true) {
+				ctx.fillStyle = "rgb(255, 26, 26)";
+				ctx.font = "20px Helvetica";
+				ctx.textAlign = "left";
+				ctx.textBaseline = "top";
+				ctx.fillText("Message: Health is full! Unable to pick up a health pack.", 500, 714);
 			}
 
 			// Player level up HP boost
