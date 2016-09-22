@@ -598,11 +598,10 @@ var DungeonGame = React.createClass({
 					}
 					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
 				} else {
-					console.log('Player health is full.')
+					console.log('Player health is full.');
+					healthFull = true;
 				}
-			}
-
-			if(self.hero.x <= (self.healthPack2.x + 32)
+			} else if(self.hero.x <= (self.healthPack2.x + 32)
 				&& self.healthPack2.x <= (self.hero.x + 32)
 				&& self.hero.y <= (self.healthPack2.y + 32)
 				&& self.healthPack2.y <= (self.hero.y + 32)
@@ -621,11 +620,7 @@ var DungeonGame = React.createClass({
 					console.log('Player health is full.')
 					healthFull = true;
 				}
-			} else {
-				healthFull = false;
-			}
-
-			if(self.hero.x <= (self.healthPack3.x + 32)
+			} else if(self.hero.x <= (self.healthPack3.x + 32)
 				&& self.healthPack3.x <= (self.hero.x + 32)
 				&& self.hero.y <= (self.healthPack3.y + 32)
 				&& self.healthPack3.y <= (self.hero.y + 32)
@@ -644,11 +639,7 @@ var DungeonGame = React.createClass({
 					console.log('Player health is full.')
 					healthFull = true;
 				}
-			} else {
-				healthFull = false;
-			}
-
-			if(self.hero.x <= (self.healthPack4.x + 32)
+			} else if(self.hero.x <= (self.healthPack4.x + 32)
 				&& self.healthPack4.x <= (self.hero.x + 32)
 				&& self.hero.y <= (self.healthPack4.y + 32)
 				&& self.healthPack4.y <= (self.hero.y + 32)
@@ -667,11 +658,7 @@ var DungeonGame = React.createClass({
 					console.log('Player health is full.');
 					healthFull = true;
 				}
-			} else {
-				healthFull = false;
-			}
-
-			if(self.hero.x <= (self.healthPack5.x + 32)
+			} else if(self.hero.x <= (self.healthPack5.x + 32)
 				&& self.healthPack5.x <= (self.hero.x + 32)
 				&& self.hero.y <= (self.healthPack5.y + 32)
 				&& self.healthPack5.y <= (self.hero.y + 32)
