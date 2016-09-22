@@ -4,8 +4,17 @@ body {
 .logo {
   margin-top: 10px; }
 
+button {
+  position: relative;
+  height: 43px;
+  width: 43px;
+  top: 668px;
+  left: 575px;
+  z-index: 1; }
+
 #gameCanvas {
+  position: relative;
   background-color: black;
-  margin-top: -30px; }
+  margin-top: -80px; }
 
 /*# sourceMappingURL=style.css.map */

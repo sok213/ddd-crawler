@@ -305,8 +305,8 @@ var DungeonGame = React.createClass({
 			*--------------------------------------------
 			*/
 
-			console.log("x: "+self.hero.x);
-			console.log("y: "+self.hero.y);
+			//console.log("x: "+self.hero.x);
+			//console.log("y: "+self.hero.y);
 
 			// Player reaches left wall
 			if(self.hero.x <= -7) {
@@ -349,7 +349,7 @@ var DungeonGame = React.createClass({
 
 			// Player holding up
 			if(38 in keysDown) { 
-				if(self.hero.weapon == "Iron Hammer") {
+				if(self.hero.weapon == "Hammer") {
 					heroImage.src = "assets/images/blocky/blocky_examineHam.png";
 				} else {
 					heroImage.src = "assets/images/blocky/blocky_examine.png";
@@ -357,7 +357,7 @@ var DungeonGame = React.createClass({
 			}
 			// Player holding down
 			if(40 in keysDown) {
-				if(self.hero.weapon == "Iron Hammer") {
+				if(self.hero.weapon == "Hammer") {
 					heroImage.src = "assets/images/blocky/blockyHam.png";
 				} else {
 					heroImage.src = "assets/images/blocky/blocky.png";
@@ -365,7 +365,7 @@ var DungeonGame = React.createClass({
 			}
 			// Player holding left
 			if(37 in keysDown) {
-				if(self.hero.weapon == "Iron Hammer") {
+				if(self.hero.weapon == "Hammer") {
 					heroImage.src = "assets/images/blocky/blocky_leftHam.png";
 				} else {
 					heroImage.src = "assets/images/blocky/blocky_left.png";
@@ -373,7 +373,7 @@ var DungeonGame = React.createClass({
 			}
 			// Player holding right
 			if(39 in keysDown) {
-				if(self.hero.weapon == "Iron Hammer") {
+				if(self.hero.weapon == "Hammer") {
 					heroImage.src = "assets/images/blocky/blocky_rightHam.png";
 				} else {
 					heroImage.src = "assets/images/blocky/blocky_right.png";
@@ -698,10 +698,10 @@ var DungeonGame = React.createClass({
 				&& self.weapon.status === false
 			) {
 				weaponEquipSound.play();
-				self.hero.weapon = 'Iron Hammer';
+				self.hero.weapon = 'Hammer';
 				self.hero.maxDMG = 20;
 				self.weapon.status = true;
-				console.log('Player has picked up Iron Hammer!');
+				console.log('Player has picked up Hammer!');
 			}
 
 			// Detect if player is touching door.
@@ -900,7 +900,7 @@ var DungeonGame = React.createClass({
 				ctx.font = "20px Helvetica";
 				ctx.textAlign = "left";
 				ctx.textBaseline = "top";
-				ctx.fillText("Message: Door is locked! Requires Level 2 to unlock!", 500, 714);
+				ctx.fillText("Message: Door is locked! Requires Level 2 to unlock!", 520, 714);
 			}
 
 			if(noSkull == true) {
@@ -908,7 +908,7 @@ var DungeonGame = React.createClass({
 				ctx.font = "20px Helvetica";
 				ctx.textAlign = "left";
 				ctx.textBaseline = "top";
-				ctx.fillText("Message: Door is locked! Requires Golden Skull to unlock!", 550, 714);
+				ctx.fillText("Message: Door is locked! Requires Golden Skull to unlock!", 570, 714);
 			}
 
 			// Display player stats.
@@ -919,9 +919,9 @@ var DungeonGame = React.createClass({
 			ctx.fillText("HP: "+self.hero.health+'/'+self.hero.maxHealth, 20, 710);
 
 			ctx.fillStyle = "rgb(255, 255, 0)";
-			ctx.fillText("Level: "+self.hero.level, 180, 710);
+			ctx.fillText("Level: "+self.hero.level, 170, 710);
 			ctx.fillStyle = "rgb(26, 198, 255)";
-			ctx.fillText("Weapon: "+self.hero.weapon, 290, 710);
+			ctx.fillText("Weapon: "+self.hero.weapon, 270, 710);
 		}
 
 		var gameOver = function() {
@@ -951,6 +951,7 @@ var DungeonGame = React.createClass({
 	render: function() {
 	    return <div>
     	<div className="logo"><img src="logo.png"></img></div>
+    	<button><i className="fa fa-low-vision" aria-hidden="true"></i></button>
 		<canvas id='gameCanvas' height='750' width='1200'></canvas>
     </div>
 	}
