@@ -10,61 +10,61 @@ var DungeonGame = React.createClass({
 				maxHealth: 150,
 				maxDMG: 1,
 				level: 1,
-				key: false,
+				skull: false,
 				dead: false
 			},
 			skull: {
 				taken: false,
-				x: 1058,
-				y: 60
+				x: null,
+				y: null
 			},
 			monster: {
 				health: 100,
 				maxDMG: 1,
 				level: 1,
 				dead: false,
-				x: 0,
-				y: 0
+				x: null,
+				y: null
 			},
 			monster2: {
 				health: 100,
 				maxDMG: 1,
 				level: 1,
 				dead: false,
-				x: 0,
-				y: 0
+				x: null,
+				y: null
 			},
 			monster3: {
 				health: 100,
 				maxDMG: 2,
 				level: 2,
 				dead: false,
-				x: 0,
-				y: 0
+				x: null,
+				y: null
 			},
 			monster4: {
 				health: 100,
 				maxDMG: 2,
 				level: 2,
 				dead: false,
-				x: 0,
-				y: 0
+				x: null,
+				y: null
 			},
 			monster5: {
 				health: 100,
 				maxDMG: 3,
 				level: 3,
 				dead: false,
-				x: 0,
-				y: 0
+				x: null,
+				y: null
 			},
 			monster6: {
 				health: 100,
 				maxDMG: 3,
 				level: 3,
 				dead: false,
-				x: 0,
-				y: 0
+				x: null,
+				y: null
 			},
 			weapon: {
 				x: 40,
@@ -72,28 +72,28 @@ var DungeonGame = React.createClass({
 				status: false
 			},
 			healthPack: {
-				x: 0,
-				y: 0,
+				x: null,
+				y: null,
 				status: false
 			},
 			healthPack2: {
-				x: 0,
-				y: 0,
+				x: null,
+				y: null,
 				status: false
 			},
 			healthPack3: {
-				x: 0,
-				y: 0,
+				x: null,
+				y: null,
 				status: false
 			},
 			healthPack4: {
-				x: 0,
-				y: 0,
+				x: null,
+				y: null,
 				status: false
 			},
 			healthPack5: {
-				x: 0,
-				y: 0,
+				x: null,
+				y: null,
 				status: false
 			}
 		}
@@ -750,20 +750,31 @@ var DungeonGame = React.createClass({
 				console.log('Player has picked up Hammer!');
 			}
 
+			// Detect if player picked up Golden Skill.
+			if(self.hero.x <= (self.skull.x + 32)
+				&& self.skull.x <= (self.hero.x + 32)
+				&& self.hero.y <= (self.skull.y + 32)
+				&& self.skull.y <= (self.hero.y + 32)
+			) {
+				weaponEquipSound.play();
+				self.hero.skull = true;
+				console.log('Player has picked up Golden Skull!');
+			}
+
 			// Detect if player is touching door.
 			if(self.hero.x <= ((canvas.width / 2.4) + 32)
 				&& canvas.width / 2.4 <= (self.hero.x + 32)
 				&& self.hero.y <= (0 + 32)
 				&& 0 <= (self.hero.y + 32)
 			) {
-				if(self.hero.key === false && self.hero.level < 2) {
+				if(self.hero.skull === false && self.hero.level < 2) {
 					console.log('you are touching the door.')
 					noLevelNoSkull = true;
-				} else if(self.hero.key == true && self.hero.level < 2) {
+				} else if(self.hero.skull == true && self.hero.level < 2) {
 					noLevel = true;
-				} else if(self.hero.key === false && self.hero.level == 2) {
+				} else if(self.hero.skull === false && self.hero.level == 2) {
 					noSkull = true;
-				} else if(self.hero.key == true & self.hero.level == 2) {
+				} else if(self.hero.skull == true & self.hero.level == 2) {
 					doorPass = true;
 				}
 			} else {
@@ -858,8 +869,13 @@ var DungeonGame = React.createClass({
 			}
 
 			// Draw Golden Skull
-			if(skullReady) {
-				ctx.drawImage(skullImage, self.skull.x, self.skull.y, skullImage.width * 1.3, skullImage.height * 1.3);
+			if(skullReady && self.hero.skull === false) {
+				self.skull.x = 1058;
+				self.skull.y = 60;
+				ctx.drawImage(skullImage, 1058, 60, skullImage.width * 1.3, skullImage.height * 1.3);
+			} else {
+				self.skull.x = null;
+				self.skull.y = null;
 			}
 
 
