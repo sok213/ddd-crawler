@@ -3,8 +3,8 @@ var DungeonGame = React.createClass({
 		return {
 			hero: {
 				speed: 120, // movement in pixels per second
-				x: 1020,
-				y: 137,
+				x: 48,
+				y: 652,
 				weapon: 'None',
 				health: 150,
 				maxHealth: 150,
@@ -67,8 +67,8 @@ var DungeonGame = React.createClass({
 				y: null
 			},
 			weapon: {
-				x: 40,
-				y: 600,
+				x: 1114,
+				y: 611,
 				status: false
 			},
 			healthPack: {
