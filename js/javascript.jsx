@@ -335,15 +335,25 @@ var DungeonGame = React.createClass({
 			}
 
 			// WALL #2 COLLISIONS
-			if(self.hero.x >= 310 && self.hero.x <= 320 && self.hero.y <= 360) {
-				self.hero.x = 310;
-			} else if(self.hero.y <= 365 && self.hero.x <= 340 && self.hero.x >= 310) {
+			if(self.hero.x >= 305 && self.hero.x <= 320 && self.hero.y <= 360) {
+				self.hero.x = 305;
+			} else if(self.hero.y <= 365 && self.hero.x <= 340 && self.hero.x >= 305) {
 				self.hero.y = 365;
-			} else if(self.hero.x <= 354 && self.hero.x >= 310 && self.hero.y <= 365) {
+			} else if(self.hero.x <= 354 && self.hero.x >= 305 && self.hero.y <= 365) {
 				self.hero.x = 354;
 			}
 
-			// WALL #3 COLLISIONS 
+			// WALL #3 COLLISIONS
+			if(self.hero.x >= 540 && self.hero.x <= 550 && self.hero.y >= 478) {
+				self.hero.x = 540;
+			} else if(self.hero.y >= 470 && self.hero.y <= 480 && self.hero.x <= 588 && self.hero.x >= 550) {
+				self.hero.y = 470;
+			} else if(self.hero.x <= 590 && self.hero.x >= 580 && self.hero.y >= 480) {
+				self.hero.x = 590;
+			}
+
+
+			// WALL #4 COLLISIONS 
 			if(self.hero.x >= 656 && self.hero.x <= 670 && self.hero.y <= 257) {
 				self.hero.x = 656;
 			} else if(self.hero.x >= 660 && self.hero.x <= 689 && self.hero.y <= 257) {
