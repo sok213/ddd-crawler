@@ -305,8 +305,8 @@ var DungeonGame = React.createClass({
 			*--------------------------------------------
 			*/
 
-			//console.log("x: "+self.hero.x);
-			//console.log("y: "+self.hero.y);
+			console.log("x: "+self.hero.x);
+			console.log("y: "+self.hero.y);
 
 			// Player reaches left wall
 			if(self.hero.x <= -7) {
@@ -341,6 +341,15 @@ var DungeonGame = React.createClass({
 				self.hero.y = 365;
 			} else if(self.hero.x <= 354 && self.hero.x >= 310 && self.hero.y <= 365) {
 				self.hero.x = 354;
+			}
+
+			// WALL #3 COLLISIONS 
+			if(self.hero.x >= 656 && self.hero.x <= 670 && self.hero.y <= 257) {
+				self.hero.x = 656;
+			} else if(self.hero.x >= 660 && self.hero.x <= 689 && self.hero.y <= 257) {
+				self.hero.y = 257;
+			} else if(self.hero.x <= 705 && self.hero.x >= 690 && self.hero.y <= 250) {
+				self.hero.x = 705;
 			}
 
 			/* PLAYER ANIMATIONS
