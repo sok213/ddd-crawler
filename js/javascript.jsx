@@ -362,6 +362,15 @@ var DungeonGame = React.createClass({
 				self.hero.x = 705;
 			}
 
+			// WALL #5 COLLISIONS
+			if(self.hero.y <= 512 && self.hero.y >= 500 && self.hero.x >= 780) {
+				self.hero.y = 512;
+			} else if(self.hero.y >= 470 && self.hero.y <= 500 && self.hero.x >= 773) {
+				self.hero.x = 773;
+			} else if(self.hero.y >= 460 && self.hero.y <= 469 && self.hero.x >= 780) {
+				self.hero.y = 460;
+			}
+
 			/* PLAYER ANIMATIONS
 			*--------------------------------------------
 			*/
