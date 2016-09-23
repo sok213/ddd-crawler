@@ -3,8 +3,8 @@ var DungeonGame = React.createClass({
 		return {
 			hero: {
 				speed: 120, // movement in pixels per second
-				x: 0,
-				y: 0,
+				x: 1020,
+				y: 137,
 				weapon: 'None',
 				health: 150,
 				maxHealth: 150,
@@ -369,6 +369,24 @@ var DungeonGame = React.createClass({
 				self.hero.x = 773;
 			} else if(self.hero.y >= 460 && self.hero.y <= 469 && self.hero.x >= 780) {
 				self.hero.y = 460;
+			}
+
+			// WALL #6 COLLISIONS
+			if(self.hero.y <= 184 && self.hero.x >= 908 && self.hero.x <= 920) {
+				self.hero.x = 908;
+			} else if(self.hero.y <= 186 && self.hero.x >= 908 && self.hero.x <= 1132 && self.hero.y >= 175) {
+				self.hero.y = 186;
+			} else if(self.hero.y <= 180 && self.hero.y >= 140 && self.hero.x <= 1129 && self.hero.x >= 1119) {
+				self.hero.x = 1129;
+			} else if(self.hero.x <= 957 && self.hero.x >= 948 && self.hero.y <= 140) {
+				self.hero.x = 957;
+			} else if(self.hero.y >= 135 && self.hero.y <= 145 && self.hero.x <= 1129 && self.hero.x >= 950) {
+				self.hero.y = 135;
+			}
+
+			if(self.hero.y >= 135 && self.hero.y <= 140 && self.hero.x >= 950 && self.hero.x <= 957) {
+				self.hero.y = 135;
+				self.hero.x = 957;
 			}
 
 			/* PLAYER ANIMATIONS
