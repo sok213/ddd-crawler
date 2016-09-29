@@ -240,41 +240,85 @@ var DungeonGame = React.createClass({
 		}, false);
 
 
-		var generateMonster = function() {
-			// Throw the monster somewhere on the screen randomly
-			self.monster.x = 32 + (Math.random() * (canvas.width - 64));
-			self.monster.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
+		var generateObjects = function() {
+			var coordinates = [];
+			// Section 1 
+			function genSec1() {
+				var randomXSec1 = (Math.random() * 290),
+				randomYSec1 = (Math.random() * 250);
+				return [randomXSec1, randomYSec1, false];
+			}
 
-			self.monster2.x = 32 + (Math.random() * (canvas.width - 64));
-			self.monster2.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
+			function genSec2() {
+				var randomXSec2 = (Math.random() * (522 - 170)) + 170,
+				randomYSec2 = (Math.random() * (664 - 403)) + 403;
+				return [randomXSec2, randomYSec2, false];
+			}
 
-			self.monster3.x = 32 + (Math.random() * (canvas.width - 64));
-			self.monster3.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
+			function genSec3() {
+				var randomXSec3 = (Math.random() * (630 - 363)) + 363,
+				randomYSec3 = (Math.random() * (341 - 45)) + 45;
+				return [randomXSec3, randomYSec3, false];
+			}
 
-			self.monster4.x = 32 + (Math.random() * (canvas.width - 64));
-			self.monster4.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
+			function genSec4() {
+				var randomXSec4 = (Math.random() * (1060 - 600)) + 600,
+				randomYSec4 = (Math.random() * (663 - 532)) + 532;
+				return [randomXSec4, randomYSec4, false];
+			}
 
-			self.monster5.x = 32 + (Math.random() * (canvas.width - 64));
-			self.monster5.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
+			function genSec5() {
+				var randomXSec5 = (Math.random() * (884 - 716)) + 716,
+				randomYSec5 = (Math.random() * 452);
+				return [randomXSec5, randomYSec5, false];
+			}
 
-			self.monster6.x = 32 + (Math.random() * (canvas.width - 64));
-			self.monster6.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
+			for(var x = 2; x > 0 ; x--) {
+				coordinates.push(genSec1());
+				coordinates.push(genSec2());
+				coordinates.push(genSec4());
+				coordinates.push(genSec5());
+			}
+
+			for(var x = 3; x > 0 ; x--) {
+				coordinates.push(genSec3());
+			}
+
+			function getCoords(object) {
+				var i = Math.floor(Math.random() * (coordinates.length - 1));
+				var unusedCoord = [];
+
+				// change array object to true to know that is has been used.
+				coordinates[i][2] = true;
+
+				coordinates.filter(function(arr) {
+					if(arr[2] === false) {
+						unusedCoord.push(arr);
+					}
+				});
+
+				object.x = coordinates[i][0];
+				object.y = coordinates[i][1];
+
+				console.log(object);
+
+				coordinates = unusedCoord;
+			}
+
+			// Throw the monsters somewhere on the screen randomly
+			getCoords(self.monster);
+			getCoords(self.monster2);
+			getCoords(self.monster3);
+			getCoords(self.monster4);
+			getCoords(self.monster5);
+			getCoords(self.monster6);
 
 			// Throw healthPack items somewhere on the screen randomly.
-			self.healthPack.x = 32 + (Math.random() * (canvas.width - 64));
-			self.healthPack.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
-
-			self.healthPack2.x = 32 + (Math.random() * (canvas.width - 64));
-			self.healthPack2.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
-
-			self.healthPack3.x = 32 + (Math.random() * (canvas.width - 64));
-			self.healthPack3.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
-
-			self.healthPack4.x = 32 + (Math.random() * (canvas.width - 64));
-			self.healthPack4.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
-
-			self.healthPack5.x = 32 + (Math.random() * (canvas.width - 64));
-			self.healthPack5.y = 32 + (Math.random() * ((canvas.height - 50) - 64));
+			getCoords(self.healthPack);
+			getCoords(self.healthPack2);
+			getCoords(self.healthPack3);
+			getCoords(self.healthPack4);
+			getCoords(self.healthPack5);
 		};
 
 		// Player movement and wall collsion rules.
@@ -305,8 +349,8 @@ var DungeonGame = React.createClass({
 			*--------------------------------------------
 			*/
 
-			console.log("x: "+self.hero.x);
-			console.log("y: "+self.hero.y);
+			//console.log("x: "+self.hero.x);
+			//console.log("y: "+self.hero.y);
 
 			// Player reaches left wall
 			if(self.hero.x <= -7) {
@@ -756,6 +800,8 @@ var DungeonGame = React.createClass({
 				&& self.hero.y <= (self.skull.y + 32)
 				&& self.skull.y <= (self.hero.y + 32)
 			) {
+				self.skull.x = null;
+				self.skull.y = null;
 				weaponEquipSound.play();
 				self.hero.skull = true;
 				console.log('Player has picked up Golden Skull!');
@@ -1006,7 +1052,7 @@ var DungeonGame = React.createClass({
 
 		// Let's play this game!
 		var then = Date.now();
-		generateMonster();
+		generateObjects();
 		main();
 	},
 
