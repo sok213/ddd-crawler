@@ -1034,22 +1034,34 @@ var DungeonGame = React.createClass({
 			ctx.fillText("Weapon: "+self.hero.weapon, 270, 710);
 		}
 
-		var gameOver = function() {
-
-		}
-
 		// The main game loop
 		var main = function() {
-			var now = Date.now();
-			var delta = now - then;
+			if(self.hero.health <= 0) {
+				sic.pause();
 
-			playerMovement(delta / 1000);
-			render();
+				// Clear the canvas
+		        ctx.fillStyle = "#000000";
+		        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-			then = now;
+				ctx.fillStyle = "rgb(255, 0, 0)";
+				ctx.font = "50px Helvetica";
+				ctx.textAlign = "center";
+				ctx.textBaseline = "top";
+				ctx.fillText("Game Over.", canvas.width / 2, canvas.height / 3);
 
-			// Request to do this again ASAP
-			requestAnimationFrame(main);
+				ctx.font = "20px Helvetica";
+				ctx.fillStyle = "rgb(250, 100, 0)";
+				ctx.fillText("(Press enter to try again)", canvas.width / 2, canvas.height / 2.4);
+			} else {
+				var now = Date.now();
+				var delta = now - then;
+				playerMovement(delta / 1000);
+				render();
+				then = now;
+
+				// Request to do this again ASAP
+				requestAnimationFrame(main);
+			}
 		}
 
 		// Let's play this game!
