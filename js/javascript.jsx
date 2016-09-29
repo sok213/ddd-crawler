@@ -113,12 +113,20 @@ var DungeonGame = React.createClass({
 		healthFull = false;
 
 		// Sound asset variables
-		var healthSound = document.createElement('AUDIO'),
-		levelUpSound = document.createElement('AUDIO'),
-		weaponEquipSound = document.createElement('AUDIO'),
-		deathSound = document.createElement('AUDIO'),
-		attackSound = document.createElement('AUDIO'),
-		killSound = document.createElement('AUDIO');
+		var healthSound = new Audio("assets/sounds/health.mp3"),
+		levelUpSound = new Audio("assets/sounds/levelup.mp3"),
+		weaponEquipSound = new Audio("assets/sounds/weapon.mp3"),
+		deathSound = new Audio("assets/sounds/death.mp3"),
+		attackSound = new Audio("assets/sounds/attack.mp3"),
+		killSound = new Audio("assets/sounds/kill.mp3"),
+		sic = new Audio("assets/sounds/sic.mp3");
+		sic.play();
+
+		// Keep looping the music.
+		sic.addEventListener('ended', function() {
+		    this.currentTime = 0;
+		    this.play();
+		}, false);
 
 		// Game Mechanics Variables
 		var collision = false,
@@ -129,13 +137,6 @@ var DungeonGame = React.createClass({
 		playerY,
 		playerX,
 		leveledUp = false;
-
-		healthSound.src = "assets/sounds/health.mp3";
-		levelUpSound.src = "assets/sounds/levelup.mp3";
-		weaponEquipSound.src = "assets/sounds/weapon.mp3";
-		deathSound.src = "assets/sounds/death.mp3";
-		attackSound.src = "assets/sounds/attack.mp3";
-		killSound.src = "assets/sounds/kill.mp3";
 
 		// Disables anti-aliasing for sharp sprites.
 		ctx.imageSmoothingEnabled = false;
@@ -242,7 +243,8 @@ var DungeonGame = React.createClass({
 
 		var generateObjects = function() {
 			var coordinates = [];
-			// Section 1 
+
+			//	Functions that specify ranges for each section on the canvas. 
 			function genSec1() {
 				var randomXSec1 = (Math.random() * 290),
 				randomYSec1 = (Math.random() * 250);
@@ -1060,7 +1062,7 @@ var DungeonGame = React.createClass({
 	    return <div>
     	<div className="logo"><img src="logo.png"></img></div>
 		<canvas id='gameCanvas' height='750' width='1200'></canvas>
-		<h4>Tip: Press spacebar to toggle visibility.</h4>
+		<h4>Tip: Press spacebar to toggle visibility. &nbsp;&nbsp;<a href="https://github.com/sok213/ddd-crawler/blob/master/js/javascript.jsx" target="_blank">View source code.</a></h4>
     </div>
 	}
 });
