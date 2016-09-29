@@ -1,6 +1,7 @@
 var DungeonGame = React.createClass({
 	getInitialState: function() {
 		return {
+			gameOver: false,
 			hero: {
 				speed: 120, // movement in pixels per second
 				x: 48,
@@ -100,17 +101,18 @@ var DungeonGame = React.createClass({
 	},
 
 	initializeGame: function() {
-		console.log("initializeGame function started.");
 
 		// Context variables
 		var canvas = document.getElementById('gameCanvas'),
 		ctx = canvas.getContext('2d'),
 		self = this.state,
+		self2 = this,
 		noLevelNoSkull = false,
 		noLevel = false,
 		noSkull = false,
 		doorPass = false,
-		healthFull = false;
+		healthFull = false,
+		saveState = this.getInitialState();
 
 		// Sound asset variables
 		var healthSound = new Audio("assets/sounds/health.mp3"),
@@ -302,8 +304,6 @@ var DungeonGame = React.createClass({
 				object.x = coordinates[i][0];
 				object.y = coordinates[i][1];
 
-				console.log(object);
-
 				coordinates = unusedCoord;
 			}
 
@@ -350,9 +350,6 @@ var DungeonGame = React.createClass({
 			/* WALL COLLISION RULES
 			*--------------------------------------------
 			*/
-
-			//console.log("x: "+self.hero.x);
-			//console.log("y: "+self.hero.y);
 
 			// Player reaches left wall
 			if(self.hero.x <= -7) {
@@ -480,7 +477,6 @@ var DungeonGame = React.createClass({
 				&& self.monster.y <= (self.hero.y + 32)
 			) {
 				attackSound.play();
-				console.log("Player has encountered a demon.")
 				if(!playerX) {
 					playerX = self.hero.x;
 					playerY = self.hero.y;
@@ -499,9 +495,6 @@ var DungeonGame = React.createClass({
 
 					self.monster.health -= playerAttack;
 					self.hero.health -= monsterAttack;
-
-					console.log('Monster HP: ' + self.monster.health)
-					console.log('Player HP: ' + self.hero.health)
 				}
 			} else if(
 				self.hero.x <= (self.monster6.x + 32)
@@ -510,7 +503,6 @@ var DungeonGame = React.createClass({
 				&& self.monster6.y <= (self.hero.y + 32)
 			) {
 				attackSound.play();
-				console.log("Player has encountered a demon.")
 				if(!playerX) {
 					playerX = self.hero.x;
 					playerY = self.hero.y;
@@ -529,9 +521,6 @@ var DungeonGame = React.createClass({
 
 					self.monster6.health -= playerAttack;
 					self.hero.health -= monsterAttack;
-
-					console.log('Monster HP: ' + self.monster6.health)
-					console.log('Player HP: ' + self.hero.health)
 				}
 			} else if(
 				self.hero.x <= (self.monster2.x + 32)
@@ -540,7 +529,6 @@ var DungeonGame = React.createClass({
 				&& self.monster2.y <= (self.hero.y + 32)
 			) {
 				attackSound.play();
-				console.log("Player has encountered a demon.")
 				if(!playerX) {
 					playerX = self.hero.x;
 					playerY = self.hero.y;
@@ -559,9 +547,6 @@ var DungeonGame = React.createClass({
 
 					self.monster2.health -= playerAttack;
 					self.hero.health -= monsterAttack;
-
-					console.log('Monster HP: ' + self.monster2.health)
-					console.log('Player HP: ' + self.hero.health)
 				}
 			} else if(
 				self.hero.x <= (self.monster3.x + 32)
@@ -570,7 +555,6 @@ var DungeonGame = React.createClass({
 				&& self.monster3.y <= (self.hero.y + 32)
 			) {
 				attackSound.play();
-				console.log("Player has encountered a demon.")
 				if(!playerX) {
 					playerX = self.hero.x;
 					playerY = self.hero.y;
@@ -589,9 +573,6 @@ var DungeonGame = React.createClass({
 
 					self.monster3.health -= playerAttack;
 					self.hero.health -= monsterAttack;
-
-					console.log('Monster HP: ' + self.monster3.health)
-					console.log('Player HP: ' + self.hero.health)
 				}
 			} else if(
 				self.hero.x <= (self.monster4.x + 32)
@@ -600,7 +581,6 @@ var DungeonGame = React.createClass({
 				&& self.monster4.y <= (self.hero.y + 32)
 			) {
 				attackSound.play();
-				console.log("Player has encountered a demon.")
 				if(!playerX) {
 					playerX = self.hero.x;
 					playerY = self.hero.y;
@@ -619,9 +599,6 @@ var DungeonGame = React.createClass({
 
 					self.monster4.health -= playerAttack;
 					self.hero.health -= monsterAttack;
-
-					console.log('Monster HP: ' + self.monster4.health)
-					console.log('Player HP: ' + self.hero.health)
 				}
 			} else if(
 				self.hero.x <= (self.monster5.x + 32)
@@ -630,7 +607,6 @@ var DungeonGame = React.createClass({
 				&& self.monster5.y <= (self.hero.y + 32)
 			) {
 				attackSound.play();
-				console.log("Player has encountered a demon.")
 				if(!playerX) {
 					playerX = self.hero.x;
 					playerY = self.hero.y;
@@ -649,9 +625,6 @@ var DungeonGame = React.createClass({
 
 					self.monster5.health -= playerAttack;
 					self.hero.health -= monsterAttack;
-
-					console.log('Monster HP: ' + self.monster5.health)
-					console.log('Player HP: ' + self.hero.health)
 				}
 			} else {
 				playerX = undefined;
@@ -674,7 +647,6 @@ var DungeonGame = React.createClass({
 			// When player runs out of health.
 			if(self.hero.health <= 0) {
 				if(self.hero.dead === false) {
-					console.log('Player has died.');
 					deathSound.play();
 					self.hero.health = 0;
 					self.hero.dead = true;
@@ -697,9 +669,7 @@ var DungeonGame = React.createClass({
 					if(self.hero.health > 150) {
 						self.hero.health = 150;
 					}
-					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
 				} else {
-					console.log('Player health is full.');
 					healthFull = true;
 				}
 			} else if(self.hero.x <= (self.healthPack2.x + 32)
@@ -716,9 +686,7 @@ var DungeonGame = React.createClass({
 					if(self.hero.health > 150) {
 						self.hero.health = 150;
 					}
-					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
 				} else {
-					console.log('Player health is full.')
 					healthFull = true;
 				}
 			} else if(self.hero.x <= (self.healthPack3.x + 32)
@@ -735,9 +703,7 @@ var DungeonGame = React.createClass({
 					if(self.hero.health > 150) {
 						self.hero.health = 150;
 					}
-					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
 				} else {
-					console.log('Player health is full.')
 					healthFull = true;
 				}
 			} else if(self.hero.x <= (self.healthPack4.x + 32)
@@ -754,9 +720,7 @@ var DungeonGame = React.createClass({
 					if(self.hero.health > 150) {
 						self.hero.health = 150;
 					}
-					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
 				} else {
-					console.log('Player health is full.');
 					healthFull = true;
 				}
 			} else if(self.hero.x <= (self.healthPack5.x + 32)
@@ -773,9 +737,7 @@ var DungeonGame = React.createClass({
 					if(self.hero.health > 150) {
 						self.hero.health = 150;
 					}
-					console.log('Player has picked up Health Pack. Player health: '+self.hero.health);
 				} else {
-					console.log('Player health is full.');
 					healthFull = true;
 				}
 			} else {
@@ -793,7 +755,6 @@ var DungeonGame = React.createClass({
 				self.hero.weapon = 'Hammer';
 				self.hero.maxDMG = 20;
 				self.weapon.status = true;
-				console.log('Player has picked up Hammer!');
 			}
 
 			// Detect if player picked up Golden Skill.
@@ -806,7 +767,6 @@ var DungeonGame = React.createClass({
 				self.skull.y = null;
 				weaponEquipSound.play();
 				self.hero.skull = true;
-				console.log('Player has picked up Golden Skull!');
 			}
 
 			// Detect if player is touching door.
@@ -816,7 +776,6 @@ var DungeonGame = React.createClass({
 				&& 0 <= (self.hero.y + 32)
 			) {
 				if(self.hero.skull === false && self.hero.level < 2) {
-					console.log('you are touching the door.')
 					noLevelNoSkull = true;
 				} else if(self.hero.skull == true && self.hero.level < 2) {
 					noLevel = true;
@@ -1052,26 +1011,35 @@ var DungeonGame = React.createClass({
 				ctx.font = "20px Helvetica";
 				ctx.fillStyle = "rgb(250, 100, 0)";
 				ctx.fillText("(Press enter to try again)", canvas.width / 2, canvas.height / 2.4);
+
+				addEventListener("keydown", function(e) {
+					if(e.keyCode == 13) {
+
+						// Restart the game.
+						self2.setState(saveState);
+						dungeonGame.initializeGame();
+						main();
+					}
+				});
 			} else {
 				var now = Date.now();
 				var delta = now - then;
 				playerMovement(delta / 1000);
 				render();
 				then = now;
-
 				// Request to do this again ASAP
 				requestAnimationFrame(main);
 			}
 		}
 
-		// Let's play this game!
+		// Start the game.
 		var then = Date.now();
 		generateObjects();
 		main();
 	},
 
 	render: function() {
-	    return <div>
+	    return <div key={this.state.timestamp}>
     	<div className="logo"><img src="logo.png"></img></div>
 		<canvas id='gameCanvas' height='750' width='1200'></canvas>
 		<h4>Tip: Press spacebar to toggle visibility. &nbsp;&nbsp;<a href="https://github.com/sok213/ddd-crawler/blob/master/js/javascript.jsx" target="_blank">View source code.</a></h4>
@@ -1081,5 +1049,6 @@ var DungeonGame = React.createClass({
 
 // Render the canvas to the DOM.
 var dungeonGame = ReactDOM.render(<DungeonGame />, document.getElementById('body'));
+
 // Initializes the game.
 dungeonGame.initializeGame();
