@@ -1,13 +1,23 @@
+var saveState,
+stateCheck = false;
+
+function storeState(state) {
+	if(stateCheck === false) {
+		console.log('saved state: ' + JSON.stringify(state));
+		stateCheck = true;
+		saveState = state;
+	}
+}
+
 var DungeonGame = React.createClass({
 	getInitialState: function() {
 		return {
-			gameOver: false,
 			hero: {
 				speed: 120, // movement in pixels per second
 				x: 48,
 				y: 652,
 				weapon: 'None',
-				health: 150,
+				health: 50,
 				maxHealth: 150,
 				maxDMG: 1,
 				level: 1,
@@ -111,8 +121,7 @@ var DungeonGame = React.createClass({
 		noLevel = false,
 		noSkull = false,
 		doorPass = false,
-		healthFull = false,
-		saveState = this.getInitialState();
+		healthFull = false;
 
 		// Sound asset variables
 		var healthSound = new Audio("assets/sounds/health.mp3"),
@@ -122,6 +131,7 @@ var DungeonGame = React.createClass({
 		attackSound = new Audio("assets/sounds/attack.mp3"),
 		killSound = new Audio("assets/sounds/kill.mp3"),
 		sic = new Audio("assets/sounds/sic.mp3");
+
 		sic.play();
 
 		// Keep looping the music.
@@ -996,8 +1006,9 @@ var DungeonGame = React.createClass({
 		// The main game loop
 		var main = function() {
 			if(self.hero.health <= 0) {
+				console.log('fuuuckk')
 				sic.pause();
-
+	
 				// Clear the canvas
 		        ctx.fillStyle = "#000000";
 		        ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -1012,9 +1023,9 @@ var DungeonGame = React.createClass({
 				ctx.fillStyle = "rgb(250, 100, 0)";
 				ctx.fillText("(Press enter to try again)", canvas.width / 2, canvas.height / 2.4);
 
-				addEventListener("keydown", function(e) {
+				addEventListener("keyup", function(e) {
 					if(e.keyCode == 13) {
-
+						storeState(self2.getInitialState());
 						// Restart the game.
 						self2.setState(saveState);
 						dungeonGame.initializeGame();
