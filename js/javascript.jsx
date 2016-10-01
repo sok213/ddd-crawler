@@ -7,7 +7,7 @@ var DungeonGame = React.createClass({
 				x: 48,
 				y: 652,
 				weapon: 'None',
-				health: 50,
+				health: 150,
 				maxHealth: 150,
 				maxDMG: 1,
 				level: 1,
@@ -881,15 +881,15 @@ var DungeonGame = React.createClass({
 				self.state.skull.y = 60;
 				ctx.drawImage(skullImage, 1058, 60, skullImage.width * 1.3, skullImage.height * 1.3);
 			} else {
-				self.state.skull.x = null;
-				self.state.skull.y = null;
+				self.state.skull.x = -900;
+				self.state.skull.y = -900;
 			}
 
 
 			// Monster death detection for all six monsters.
 			if(self.state.monster.health <= 0) {
-				self.state.monster.y = null;
-				self.state.monster.x = null;
+				self.state.monster.y = -900;
+				self.state.monster.x = -900;
 				if(self.state.monster.dead === false) {
 					killSound.play();
 					self.state.monster.dead = true;
@@ -897,8 +897,8 @@ var DungeonGame = React.createClass({
 			}
 
 			if(self.state.monster2.health <= 0) {
-				self.state.monster2.y = null;
-				self.state.monster2.x = null;
+				self.state.monster2.y = -900;
+				self.state.monster2.x = -900;
 				if(self.state.monster2.dead === false) {
 					killSound.play();
 					self.state.monster2.dead = true;
@@ -906,8 +906,8 @@ var DungeonGame = React.createClass({
 			}
 
 			if(self.state.monster3.health <= 0) {
-				self.state.monster3.y = null;
-				self.state.monster3.x = null;
+				self.state.monster3.y = -900;
+				self.state.monster3.x = -900;
 				if(self.state.monster3.dead === false) {
 					killSound.play();
 					self.state.monster3.dead = true;
@@ -915,8 +915,8 @@ var DungeonGame = React.createClass({
 			}
 
 			if(self.state.monster4.health <= 0) {
-				self.state.monster4.y = null;
-				self.state.monster4.x = null;
+				self.state.monster4.y = -900;
+				self.state.monster4.x = -900;
 				if(self.state.monster4.dead === false) {
 					killSound.play();
 					self.state.monster4.dead = true;
@@ -924,8 +924,8 @@ var DungeonGame = React.createClass({
 			}
 
 			if(self.state.monster5.health <= 0) {
-				self.state.monster5.y = null;
-				self.state.monster5.x = null;
+				self.state.monster5.y = -900;
+				self.state.monster5.x = -900;
 				if(self.state.monster5.dead === false) {
 					killSound.play();
 					self.state.monster5.dead = true;
@@ -933,8 +933,8 @@ var DungeonGame = React.createClass({
 			}
 
 			if(self.state.monster6.health <= 0) {
-				self.state.monster6.y = null;
-				self.state.monster6.x = null;
+				self.state.monster6.y = -900;
+				self.state.monster6.x = -900;
 				if(self.state.monster6.dead === false) {
 					killSound.play();
 					self.state.monster6.dead = true;
