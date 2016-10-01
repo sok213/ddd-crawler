@@ -9,10 +9,22 @@ killSound = new Audio("assets/sounds/kill.mp3"),
 sic = new Audio("assets/sounds/sic.mp3"),
 winSound = new Audio("assets/sounds/win.mp3");
 
+var lights = false;
+
+// Detects is player pressed spacebar. If so, toggle lights.
+addEventListener('keydown', function(e) {
+	if(e.keyCode == 32) {
+		if(lights === false) {
+			lights = true;
+		} else {
+			lights = false;
+		}
+	}
+});
+
 var DungeonGame = React.createClass({
 	getInitialState: function() {
 		return {
-			lights: false,
 			hero: {
 				speed: 120, // movement in pixels per second
 				x: 48,
@@ -950,6 +962,24 @@ var DungeonGame = React.createClass({
 				}
 			}
 
+			// Black layer to limit player visibility. 
+			if(lights === false) {
+				// Limited player visibility.
+
+				// Top layer
+				ctx.fillStyle = "#000000";
+			    ctx.fillRect(0, 0, 3000, self.state.hero.y - 70);
+
+			    // Bottom layer 
+			    ctx.fillRect(0, self.state.hero.y + 90, 3000, 3000);
+
+			    // Left layer 
+			    ctx.fillRect(0, 0, self.state.hero.x - 70, 3000);
+
+			    // Right layer 
+			    ctx.fillRect(1200, 0, self.state.hero.x - 1090, 3000);
+			}
+
 			// If health is full while touching a health pack.
 			if(healthFull == true) {
 				ctx.fillStyle = "rgb(255, 26, 26)";
@@ -987,23 +1017,6 @@ var DungeonGame = React.createClass({
 				ctx.textAlign = "left";
 				ctx.textBaseline = "top";
 				ctx.fillText("Message: Door is locked! Requires Golden Skull to unlock!", 570, 714);
-			}
-
-			if(self.state.lights === false) {
-				// Limited player visibility.
-
-				// Top layer
-				ctx.fillStyle = "#000000";
-			    ctx.fillRect(0, 0, 3000, self.state.hero.y - 70);
-
-			    // Bottom layer 
-			    ctx.fillRect(0, self.state.hero.y + 90, 3000, 3000);
-
-			    // Left layer 
-			    ctx.fillRect(0, 0, self.state.hero.x - 70, 3000);
-
-			    // Right layer 
-			    ctx.fillRect(1200, 0, self.state.hero.x - 1090, 3000);
 			}
 
 			// Display player stats.
@@ -1069,17 +1082,6 @@ var DungeonGame = React.createClass({
 			}
 
 		}
-
-		// Detects is player pressed spacebar. If so, toggle lights.
-		addEventListener('keydown', function(e) {
-			if(e.keyCode == 32) {
-				if(self.state.lights === false) {
-					self.state.lights = true;
-				} else {
-					self.state.lights = false;
-				}
-			}
-		});
 
 		// Detects if player presses the ENTER button to restart the game.
 		addEventListener("keyup", function(e) {
