@@ -6,7 +6,8 @@ weaponEquipSound = new Audio("assets/sounds/weapon.mp3"),
 deathSound = new Audio("assets/sounds/death.mp3"),
 attackSound = new Audio("assets/sounds/attack.mp3"),
 killSound = new Audio("assets/sounds/kill.mp3"),
-sic = new Audio("assets/sounds/sic.mp3");
+sic = new Audio("assets/sounds/sic.mp3"),
+winSound = new Audio("assets/sounds/win.mp3");
 
 var DungeonGame = React.createClass({
 	getInitialState: function() {
@@ -127,6 +128,12 @@ var DungeonGame = React.createClass({
 
 		// Keep looping the music.
 		sic.addEventListener('ended', function() {
+		    this.currentTime = 0;
+		    this.play();
+		}, false);
+
+		// Keep looping the music.
+		winSound.addEventListener('ended', function() {
 		    this.currentTime = 0;
 		    this.play();
 		}, false);
@@ -1018,6 +1025,8 @@ var DungeonGame = React.createClass({
 				console.log('win.');
 				// Pause game music.
 				sic.pause();
+				winSound.currentTime = 0;
+				winSound.play();
 	
 				// Clear the canvas
 		        ctx.fillStyle = "#000000";
@@ -1027,10 +1036,10 @@ var DungeonGame = React.createClass({
 				ctx.font = "50px Helvetica";
 				ctx.textAlign = "center";
 				ctx.textBaseline = "top";
-				ctx.fillText("You Win! Thank you for playing.", canvas.width / 2, canvas.height / 3);
+				ctx.fillText("You win! Thank you for playing.", canvas.width / 2, canvas.height / 3);
 				ctx.font = "20px Helvetica";
 				ctx.fillStyle = "rgb(50, 255, 0)";
-				ctx.fillText("(Press enter to try again)", canvas.width / 2, canvas.height / 2.4);
+				ctx.fillText("(Press enter to play again)", canvas.width / 2, canvas.height / 2.4);
 			} else {
 				var now = Date.now();
 				var delta = now - then;
@@ -1045,7 +1054,10 @@ var DungeonGame = React.createClass({
 		// Detects if player presses the ENTER button to restart the game.
 		addEventListener("keyup", function(e) {
 			if(e.keyCode == 13 && (self.state.hero.health <= 0 || doorPass == true)) {
-				doorPass = false;
+				if(doorPass == true) {
+					winSound.pause();
+					doorPass = false;
+				}
 				console.log('keypressed')
 				// Revert all states to its initial state.
 				self.setState(self.getInitialState());
