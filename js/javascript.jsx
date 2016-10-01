@@ -1,14 +1,4 @@
-var saveState,
-stateCheck = false;
-
-function storeState(state) {
-	if(stateCheck === false) {
-		console.log('saved state: ' + JSON.stringify(state));
-		stateCheck = true;
-		saveState = state;
-	}
-}
-
+var then = Date.now();
 var DungeonGame = React.createClass({
 	getInitialState: function() {
 		return {
@@ -115,7 +105,7 @@ var DungeonGame = React.createClass({
 		// Context variables
 		var canvas = document.getElementById('gameCanvas'),
 		ctx = canvas.getContext('2d'),
-		self = this.state,
+		self = this,
 		self2 = this,
 		noLevelNoSkull = false,
 		noLevel = false,
@@ -132,6 +122,7 @@ var DungeonGame = React.createClass({
 		killSound = new Audio("assets/sounds/kill.mp3"),
 		sic = new Audio("assets/sounds/sic.mp3");
 
+		// Start the game music.
 		sic.play();
 
 		// Keep looping the music.
@@ -318,19 +309,19 @@ var DungeonGame = React.createClass({
 			}
 
 			// Throw the monsters somewhere on the screen randomly
-			getCoords(self.monster);
-			getCoords(self.monster2);
-			getCoords(self.monster3);
-			getCoords(self.monster4);
-			getCoords(self.monster5);
-			getCoords(self.monster6);
+			getCoords(self.state.monster);
+			getCoords(self.state.monster2);
+			getCoords(self.state.monster3);
+			getCoords(self.state.monster4);
+			getCoords(self.state.monster5);
+			getCoords(self.state.monster6);
 
 			// Throw healthPack items somewhere on the screen randomly.
-			getCoords(self.healthPack);
-			getCoords(self.healthPack2);
-			getCoords(self.healthPack3);
-			getCoords(self.healthPack4);
-			getCoords(self.healthPack5);
+			getCoords(self.state.healthPack);
+			getCoords(self.state.healthPack2);
+			getCoords(self.state.healthPack3);
+			getCoords(self.state.healthPack4);
+			getCoords(self.state.healthPack5);
 		};
 
 		// Player movement and wall collsion rules.
@@ -342,19 +333,19 @@ var DungeonGame = React.createClass({
 		
 			// Player holding up
 			if(38 in keysDown) { 
-				self.hero.y -= self.hero.speed * modifier; 
+				self.state.hero.y -= self.state.hero.speed * modifier; 
 			}
 			// Player holding down
 			if(40 in keysDown) {
-				self.hero.y += self.hero.speed * modifier;
+				self.state.hero.y += self.state.hero.speed * modifier;
 			}
 			// Player holding left
 			if(37 in keysDown) {
-				self.hero.x -= self.hero.speed * modifier;
+				self.state.hero.x -= self.state.hero.speed * modifier;
 			}
 			// Player holding right
 			if(39 in keysDown) {
-				self.hero.x += self.hero.speed * modifier;
+				self.state.hero.x += self.state.hero.speed * modifier;
 			}
 
 			/* WALL COLLISION RULES
@@ -362,84 +353,84 @@ var DungeonGame = React.createClass({
 			*/
 
 			// Player reaches left wall
-			if(self.hero.x <= -7) {
-				self.hero.x = -7;
+			if(self.state.hero.x <= -7) {
+				self.state.hero.x = -7;
 			}
 			// Player reaches right wall
-			if(self.hero.x >= 1168) {
-				self.hero.x = 1168;
+			if(self.state.hero.x >= 1168) {
+				self.state.hero.x = 1168;
 			}
 			// Player reaches top wall
-			if(self.hero.y <= -0.37) {
-				self.hero.y = -0.37;
+			if(self.state.hero.y <= -0.37) {
+				self.state.hero.y = -0.37;
 			}
 			// Player reaches bottom wall
-			if(self.hero.y >= 663.73) {
-				self.hero.y = 663.73;
+			if(self.state.hero.y >= 663.73) {
+				self.state.hero.y = 663.73;
 			}
 
 			// WALL #1 COLLISIONS
-			if(self.hero.y >= 280 && self.hero.x >= 118 && self.hero.x <= 130) {
-				self.hero.x = 118;
-			} else if(self.hero.y >= 276 && self.hero.x >= 119 && self.hero.x <= 165 && self.hero.y <= 295) {
-				self.hero.y = 276; 
-			} else if(self.hero.y >= 276 && self.hero.x <= 165 && self.hero.x >= 120) {
-				self.hero.x = 165;
+			if(self.state.hero.y >= 280 && self.state.hero.x >= 118 && self.state.hero.x <= 130) {
+				self.state.hero.x = 118;
+			} else if(self.state.hero.y >= 276 && self.state.hero.x >= 119 && self.state.hero.x <= 165 && self.state.hero.y <= 295) {
+				self.state.hero.y = 276; 
+			} else if(self.state.hero.y >= 276 && self.state.hero.x <= 165 && self.state.hero.x >= 120) {
+				self.state.hero.x = 165;
 			}
 
 			// WALL #2 COLLISIONS
-			if(self.hero.x >= 305 && self.hero.x <= 320 && self.hero.y <= 360) {
-				self.hero.x = 305;
-			} else if(self.hero.y <= 365 && self.hero.x <= 340 && self.hero.x >= 305) {
-				self.hero.y = 365;
-			} else if(self.hero.x <= 354 && self.hero.x >= 305 && self.hero.y <= 365) {
-				self.hero.x = 354;
+			if(self.state.hero.x >= 305 && self.state.hero.x <= 320 && self.state.hero.y <= 360) {
+				self.state.hero.x = 305;
+			} else if(self.state.hero.y <= 365 && self.state.hero.x <= 340 && self.state.hero.x >= 305) {
+				self.state.hero.y = 365;
+			} else if(self.state.hero.x <= 354 && self.state.hero.x >= 305 && self.state.hero.y <= 365) {
+				self.state.hero.x = 354;
 			}
 
 			// WALL #3 COLLISIONS
-			if(self.hero.x >= 540 && self.hero.x <= 550 && self.hero.y >= 478) {
-				self.hero.x = 540;
-			} else if(self.hero.y >= 470 && self.hero.y <= 480 && self.hero.x <= 588 && self.hero.x >= 550) {
-				self.hero.y = 470;
-			} else if(self.hero.x <= 590 && self.hero.x >= 580 && self.hero.y >= 480) {
-				self.hero.x = 590;
+			if(self.state.hero.x >= 540 && self.state.hero.x <= 550 && self.state.hero.y >= 478) {
+				self.state.hero.x = 540;
+			} else if(self.state.hero.y >= 470 && self.state.hero.y <= 480 && self.state.hero.x <= 588 && self.state.hero.x >= 550) {
+				self.state.hero.y = 470;
+			} else if(self.state.hero.x <= 590 && self.state.hero.x >= 580 && self.state.hero.y >= 480) {
+				self.state.hero.x = 590;
 			}
 
 
 			// WALL #4 COLLISIONS 
-			if(self.hero.x >= 656 && self.hero.x <= 670 && self.hero.y <= 257) {
-				self.hero.x = 656;
-			} else if(self.hero.x >= 660 && self.hero.x <= 689 && self.hero.y <= 257) {
-				self.hero.y = 257;
-			} else if(self.hero.x <= 705 && self.hero.x >= 690 && self.hero.y <= 250) {
-				self.hero.x = 705;
+			if(self.state.hero.x >= 656 && self.state.hero.x <= 670 && self.state.hero.y <= 257) {
+				self.state.hero.x = 656;
+			} else if(self.state.hero.x >= 660 && self.state.hero.x <= 689 && self.state.hero.y <= 257) {
+				self.state.hero.y = 257;
+			} else if(self.state.hero.x <= 705 && self.state.hero.x >= 690 && self.state.hero.y <= 250) {
+				self.state.hero.x = 705;
 			}
 
 			// WALL #5 COLLISIONS
-			if(self.hero.y <= 512 && self.hero.y >= 500 && self.hero.x >= 780) {
-				self.hero.y = 512;
-			} else if(self.hero.y >= 470 && self.hero.y <= 500 && self.hero.x >= 773) {
-				self.hero.x = 773;
-			} else if(self.hero.y >= 460 && self.hero.y <= 469 && self.hero.x >= 780) {
-				self.hero.y = 460;
+			if(self.state.hero.y <= 512 && self.state.hero.y >= 500 && self.state.hero.x >= 780) {
+				self.state.hero.y = 512;
+			} else if(self.state.hero.y >= 470 && self.state.hero.y <= 500 && self.state.hero.x >= 773) {
+				self.state.hero.x = 773;
+			} else if(self.state.hero.y >= 460 && self.state.hero.y <= 469 && self.state.hero.x >= 780) {
+				self.state.hero.y = 460;
 			}
 
 			// WALL #6 COLLISIONS
-			if(self.hero.y <= 184 && self.hero.x >= 908 && self.hero.x <= 920) {
-				self.hero.x = 908;
-			} else if(self.hero.y <= 186 && self.hero.x >= 908 && self.hero.x <= 1132 && self.hero.y >= 175) {
-				self.hero.y = 186;
-			} else if(self.hero.y <= 180 && self.hero.y >= 140 && self.hero.x <= 1129 && self.hero.x >= 1119) {
-				self.hero.x = 1129;
-			} else if(self.hero.x <= 957 && self.hero.x >= 948 && self.hero.y <= 140) {
-				self.hero.x = 957;
-			} else if(self.hero.y >= 135 && self.hero.y <= 145 && self.hero.x <= 1129 && self.hero.x >= 950) {
-				self.hero.y = 135;
+			if(self.state.hero.y <= 184 && self.state.hero.x >= 908 && self.state.hero.x <= 920) {
+				self.state.hero.x = 908;
+			} else if(self.state.hero.y <= 186 && self.state.hero.x >= 908 && self.state.hero.x <= 1132 && self.state.hero.y >= 175) {
+				self.state.hero.y = 186;
+			} else if(self.state.hero.y <= 180 && self.state.hero.y >= 140 && self.state.hero.x <= 1129 && self.state.hero.x >= 1119) {
+				self.state.hero.x = 1129;
+			} else if(self.state.hero.x <= 957 && self.state.hero.x >= 948 && self.state.hero.y <= 140) {
+				self.state.hero.x = 957;
+			} else if(self.state.hero.y >= 135 && self.state.hero.y <= 145 && self.state.hero.x <= 1129 && self.state.hero.x >= 950) {
+				self.state.hero.y = 135;
 			}
 
-			if(self.hero.y >= 135 && self.hero.y <= 140 && self.hero.x >= 950 && self.hero.x <= 957) {
-				self.hero.y = 135;
-				self.hero.x = 957;
+			if(self.state.hero.y >= 135 && self.state.hero.y <= 140 && self.state.hero.x >= 950 && self.state.hero.x <= 957) {
+				self.state.hero.y = 135;
+				self.state.hero.x = 957;
 			}
 
 			/* PLAYER ANIMATIONS
@@ -448,7 +439,7 @@ var DungeonGame = React.createClass({
 
 			// Player holding up
 			if(38 in keysDown) { 
-				if(self.hero.weapon == "Hammer") {
+				if(self.state.hero.weapon == "Hammer") {
 					heroImage.src = "assets/images/blocky/blocky_examineHam.png";
 				} else {
 					heroImage.src = "assets/images/blocky/blocky_examine.png";
@@ -456,7 +447,7 @@ var DungeonGame = React.createClass({
 			}
 			// Player holding down
 			if(40 in keysDown) {
-				if(self.hero.weapon == "Hammer") {
+				if(self.state.hero.weapon == "Hammer") {
 					heroImage.src = "assets/images/blocky/blockyHam.png";
 				} else {
 					heroImage.src = "assets/images/blocky/blocky.png";
@@ -464,7 +455,7 @@ var DungeonGame = React.createClass({
 			}
 			// Player holding left
 			if(37 in keysDown) {
-				if(self.hero.weapon == "Hammer") {
+				if(self.state.hero.weapon == "Hammer") {
 					heroImage.src = "assets/images/blocky/blocky_leftHam.png";
 				} else {
 					heroImage.src = "assets/images/blocky/blocky_left.png";
@@ -472,7 +463,7 @@ var DungeonGame = React.createClass({
 			}
 			// Player holding right
 			if(39 in keysDown) {
-				if(self.hero.weapon == "Hammer") {
+				if(self.state.hero.weapon == "Hammer") {
 					heroImage.src = "assets/images/blocky/blocky_rightHam.png";
 				} else {
 					heroImage.src = "assets/images/blocky/blocky_right.png";
@@ -481,160 +472,160 @@ var DungeonGame = React.createClass({
 
 			// Detect if player is touching a monster.
 			if(
-				self.hero.x <= (self.monster.x + 32)
-				&& self.monster.x <= (self.hero.x + 32)
-				&& self.hero.y <= (self.monster.y + 32)
-				&& self.monster.y <= (self.hero.y + 32)
+				self.state.hero.x <= (self.state.monster.x + 32)
+				&& self.state.monster.x <= (self.state.hero.x + 32)
+				&& self.state.hero.y <= (self.state.monster.y + 32)
+				&& self.state.monster.y <= (self.state.hero.y + 32)
 			) {
 				attackSound.play();
 				if(!playerX) {
-					playerX = self.hero.x;
-					playerY = self.hero.y;
+					playerX = self.state.hero.x;
+					playerY = self.state.hero.y;
 				}
 
-				self.hero.x = playerX;
-				self.hero.y = playerY;
+				self.state.hero.x = playerX;
+				self.state.hero.y = playerY;
 
 				// Combat Algorithm.
 				if(
-					self.monster.health > 0 && (39 in keysDown || 37 in keysDown
+					self.state.monster.health > 0 && (39 in keysDown || 37 in keysDown
 					|| 40 in keysDown || 38 in keysDown)
 				) {
-					var playerAttack = Math.floor((Math.random() * (self.hero.maxDMG * self.hero.level)) + 5);
-					var monsterAttack = Math.floor((Math.random() * (self.monster.maxDMG * self.monster.level)) + 5);
+					var playerAttack = Math.floor((Math.random() * (self.state.hero.maxDMG * self.state.hero.level)) + 5);
+					var monsterAttack = Math.floor((Math.random() * (self.state.monster.maxDMG * self.state.monster.level)) + 5);
 
-					self.monster.health -= playerAttack;
-					self.hero.health -= monsterAttack;
+					self.state.monster.health -= playerAttack;
+					self.state.hero.health -= monsterAttack;
 				}
 			} else if(
-				self.hero.x <= (self.monster6.x + 32)
-				&& self.monster6.x <= (self.hero.x + 32)
-				&& self.hero.y <= (self.monster6.y + 32)
-				&& self.monster6.y <= (self.hero.y + 32)
+				self.state.hero.x <= (self.state.monster6.x + 32)
+				&& self.state.monster6.x <= (self.state.hero.x + 32)
+				&& self.state.hero.y <= (self.state.monster6.y + 32)
+				&& self.state.monster6.y <= (self.state.hero.y + 32)
 			) {
 				attackSound.play();
 				if(!playerX) {
-					playerX = self.hero.x;
-					playerY = self.hero.y;
+					playerX = self.state.hero.x;
+					playerY = self.state.hero.y;
 				}
 
-				self.hero.x = playerX;
-				self.hero.y = playerY;
+				self.state.hero.x = playerX;
+				self.state.hero.y = playerY;
 
 				// Combat Algorithm.
 				if(
-					self.monster6.health > 0 && (39 in keysDown || 37 in keysDown
+					self.state.monster6.health > 0 && (39 in keysDown || 37 in keysDown
 					|| 40 in keysDown || 38 in keysDown)
 				) {
-					var playerAttack = Math.floor((Math.random() * (self.hero.maxDMG * self.hero.level)) + 5);
-					var monsterAttack = Math.floor((Math.random() * (self.monster6.maxDMG * self.monster6.level)) + 5);
+					var playerAttack = Math.floor((Math.random() * (self.state.hero.maxDMG * self.state.hero.level)) + 5);
+					var monsterAttack = Math.floor((Math.random() * (self.state.monster6.maxDMG * self.state.monster6.level)) + 5);
 
-					self.monster6.health -= playerAttack;
-					self.hero.health -= monsterAttack;
+					self.state.monster6.health -= playerAttack;
+					self.state.hero.health -= monsterAttack;
 				}
 			} else if(
-				self.hero.x <= (self.monster2.x + 32)
-				&& self.monster2.x <= (self.hero.x + 32)
-				&& self.hero.y <= (self.monster2.y + 32)
-				&& self.monster2.y <= (self.hero.y + 32)
+				self.state.hero.x <= (self.state.monster2.x + 32)
+				&& self.state.monster2.x <= (self.state.hero.x + 32)
+				&& self.state.hero.y <= (self.state.monster2.y + 32)
+				&& self.state.monster2.y <= (self.state.hero.y + 32)
 			) {
 				attackSound.play();
 				if(!playerX) {
-					playerX = self.hero.x;
-					playerY = self.hero.y;
+					playerX = self.state.hero.x;
+					playerY = self.state.hero.y;
 				}
 
-				self.hero.x = playerX;
-				self.hero.y = playerY;
+				self.state.hero.x = playerX;
+				self.state.hero.y = playerY;
 
 				// Combat Algorithm.
 				if(
-					self.monster2.health > 0 && (39 in keysDown || 37 in keysDown
+					self.state.monster2.health > 0 && (39 in keysDown || 37 in keysDown
 					|| 40 in keysDown || 38 in keysDown)
 				) {
-					var playerAttack = Math.floor((Math.random() * (self.hero.maxDMG * self.hero.level)) + 5);
-					var monsterAttack = Math.floor((Math.random() * (self.monster2.maxDMG * self.monster2.level)) + 5);
+					var playerAttack = Math.floor((Math.random() * (self.state.hero.maxDMG * self.state.hero.level)) + 5);
+					var monsterAttack = Math.floor((Math.random() * (self.state.monster2.maxDMG * self.state.monster2.level)) + 5);
 
-					self.monster2.health -= playerAttack;
-					self.hero.health -= monsterAttack;
+					self.state.monster2.health -= playerAttack;
+					self.state.hero.health -= monsterAttack;
 				}
 			} else if(
-				self.hero.x <= (self.monster3.x + 32)
-				&& self.monster3.x <= (self.hero.x + 32)
-				&& self.hero.y <= (self.monster3.y + 32)
-				&& self.monster3.y <= (self.hero.y + 32)
+				self.state.hero.x <= (self.state.monster3.x + 32)
+				&& self.state.monster3.x <= (self.state.hero.x + 32)
+				&& self.state.hero.y <= (self.state.monster3.y + 32)
+				&& self.state.monster3.y <= (self.state.hero.y + 32)
 			) {
 				attackSound.play();
 				if(!playerX) {
-					playerX = self.hero.x;
-					playerY = self.hero.y;
+					playerX = self.state.hero.x;
+					playerY = self.state.hero.y;
 				}
 
-				self.hero.x = playerX;
-				self.hero.y = playerY;
+				self.state.hero.x = playerX;
+				self.state.hero.y = playerY;
 
 				// Combat Algorithm.
 				if(
-					self.monster3.health > 0 && (39 in keysDown || 37 in keysDown
+					self.state.monster3.health > 0 && (39 in keysDown || 37 in keysDown
 					|| 40 in keysDown || 38 in keysDown)
 				) {
-					var playerAttack = Math.floor((Math.random() * (self.hero.maxDMG * self.hero.level)) + 5);
-					var monsterAttack = Math.floor((Math.random() * (self.monster3.maxDMG * self.monster3.level)) + 5);
+					var playerAttack = Math.floor((Math.random() * (self.state.hero.maxDMG * self.state.hero.level)) + 5);
+					var monsterAttack = Math.floor((Math.random() * (self.state.monster3.maxDMG * self.state.monster3.level)) + 5);
 
-					self.monster3.health -= playerAttack;
-					self.hero.health -= monsterAttack;
+					self.state.monster3.health -= playerAttack;
+					self.state.hero.health -= monsterAttack;
 				}
 			} else if(
-				self.hero.x <= (self.monster4.x + 32)
-				&& self.monster4.x <= (self.hero.x + 32)
-				&& self.hero.y <= (self.monster4.y + 32)
-				&& self.monster4.y <= (self.hero.y + 32)
+				self.state.hero.x <= (self.state.monster4.x + 32)
+				&& self.state.monster4.x <= (self.state.hero.x + 32)
+				&& self.state.hero.y <= (self.state.monster4.y + 32)
+				&& self.state.monster4.y <= (self.state.hero.y + 32)
 			) {
 				attackSound.play();
 				if(!playerX) {
-					playerX = self.hero.x;
-					playerY = self.hero.y;
+					playerX = self.state.hero.x;
+					playerY = self.state.hero.y;
 				}
 
-				self.hero.x = playerX;
-				self.hero.y = playerY;
+				self.state.hero.x = playerX;
+				self.state.hero.y = playerY;
 
 				// Combat Algorithm.
 				if(
-					self.monster4.health > 0 && (39 in keysDown || 37 in keysDown
+					self.state.monster4.health > 0 && (39 in keysDown || 37 in keysDown
 					|| 40 in keysDown || 38 in keysDown)
 				) {
-					var playerAttack = Math.floor((Math.random() * (self.hero.maxDMG * self.hero.level)) + 5);
-					var monsterAttack = Math.floor((Math.random() * (self.monster4.maxDMG * self.monster4.level)) + 5);
+					var playerAttack = Math.floor((Math.random() * (self.state.hero.maxDMG * self.state.hero.level)) + 5);
+					var monsterAttack = Math.floor((Math.random() * (self.state.monster4.maxDMG * self.state.monster4.level)) + 5);
 
-					self.monster4.health -= playerAttack;
-					self.hero.health -= monsterAttack;
+					self.state.monster4.health -= playerAttack;
+					self.state.hero.health -= monsterAttack;
 				}
 			} else if(
-				self.hero.x <= (self.monster5.x + 32)
-				&& self.monster5.x <= (self.hero.x + 32)
-				&& self.hero.y <= (self.monster5.y + 32)
-				&& self.monster5.y <= (self.hero.y + 32)
+				self.state.hero.x <= (self.state.monster5.x + 32)
+				&& self.state.monster5.x <= (self.state.hero.x + 32)
+				&& self.state.hero.y <= (self.state.monster5.y + 32)
+				&& self.state.monster5.y <= (self.state.hero.y + 32)
 			) {
 				attackSound.play();
 				if(!playerX) {
-					playerX = self.hero.x;
-					playerY = self.hero.y;
+					playerX = self.state.hero.x;
+					playerY = self.state.hero.y;
 				}
 
-				self.hero.x = playerX;
-				self.hero.y = playerY;
+				self.state.hero.x = playerX;
+				self.state.hero.y = playerY;
 
 				// Combat Algorithm.
 				if(
-					self.monster5.health > 0 && (39 in keysDown || 37 in keysDown
+					self.state.monster5.health > 0 && (39 in keysDown || 37 in keysDown
 					|| 40 in keysDown || 38 in keysDown)
 				) {
-					var playerAttack = Math.floor((Math.random() * (self.hero.maxDMG * self.hero.level)) + 5);
-					var monsterAttack = Math.floor((Math.random() * (self.monster.maxDMG * self.monster5.level)) + 5);
+					var playerAttack = Math.floor((Math.random() * (self.state.hero.maxDMG * self.state.hero.level)) + 5);
+					var monsterAttack = Math.floor((Math.random() * (self.state.monster.maxDMG * self.state.monster5.level)) + 5);
 
-					self.monster5.health -= playerAttack;
-					self.hero.health -= monsterAttack;
+					self.state.monster5.health -= playerAttack;
+					self.state.hero.health -= monsterAttack;
 				}
 			} else {
 				playerX = undefined;
@@ -643,109 +634,109 @@ var DungeonGame = React.createClass({
 
 			// Level up player if all enemies are dead
 			if(
-				self.monster.health <= 0 && self.monster2.health <= 0
-				&& self.monster3.health <= 0 && self.monster4.health <= 0
-				&& self.monster5.health <= 0 && self.monster6.health <= 0
+				self.state.monster.health <= 0 && self.state.monster2.health <= 0
+				&& self.state.monster3.health <= 0 && self.state.monster4.health <= 0
+				&& self.state.monster5.health <= 0 && self.state.monster6.health <= 0
 			) {
 				if(leveledUp === false) {
-					self.hero.level = 2;
+					self.state.hero.level = 2;
 					levelUpSound.play();
 					leveledUp = true;
 				}
 			}
 
 			// When player runs out of health.
-			if(self.hero.health <= 0) {
-				if(self.hero.dead === false) {
+			if(self.state.hero.health <= 0) {
+				if(self.state.hero.dead === false) {
 					deathSound.play();
-					self.hero.health = 0;
-					self.hero.dead = true;
+					self.state.hero.health = 0;
+					self.state.hero.dead = true;
 				} 
-				self.hero.health = 0;
+				self.state.hero.health = 0;
 			}
 
 			// Detect if player touched Health Pack.
-			if(self.hero.x <= (self.healthPack.x + 32)
-				&& self.healthPack.x <= (self.hero.x + 32)
-				&& self.hero.y <= (self.healthPack.y + 32)
-				&& self.healthPack.y <= (self.hero.y + 32)
-				&& self.healthPack.status === false
+			if(self.state.hero.x <= (self.state.healthPack.x + 32)
+				&& self.state.healthPack.x <= (self.state.hero.x + 32)
+				&& self.state.hero.y <= (self.state.healthPack.y + 32)
+				&& self.state.healthPack.y <= (self.state.hero.y + 32)
+				&& self.state.healthPack.status === false
 			) {
-				if(self.hero.health < 150) {
+				if(self.state.hero.health < 150) {
 					healthSound.play();
-					self.healthPack.status = true;
-					self.hero.health += 50;
+					self.state.healthPack.status = true;
+					self.state.hero.health += 50;
 
-					if(self.hero.health > 150) {
-						self.hero.health = 150;
+					if(self.state.hero.health > 150) {
+						self.state.hero.health = 150;
 					}
 				} else {
 					healthFull = true;
 				}
-			} else if(self.hero.x <= (self.healthPack2.x + 32)
-				&& self.healthPack2.x <= (self.hero.x + 32)
-				&& self.hero.y <= (self.healthPack2.y + 32)
-				&& self.healthPack2.y <= (self.hero.y + 32)
-				&& self.healthPack2.status === false
+			} else if(self.state.hero.x <= (self.state.healthPack2.x + 32)
+				&& self.state.healthPack2.x <= (self.state.hero.x + 32)
+				&& self.state.hero.y <= (self.state.healthPack2.y + 32)
+				&& self.state.healthPack2.y <= (self.state.hero.y + 32)
+				&& self.state.healthPack2.status === false
 			) {
-				if(self.hero.health < 150) {
+				if(self.state.hero.health < 150) {
 					healthSound.play();
-					self.healthPack2.status = true;
-					self.hero.health += 50;
+					self.state.healthPack2.status = true;
+					self.state.hero.health += 50;
 
-					if(self.hero.health > 150) {
-						self.hero.health = 150;
+					if(self.state.hero.health > 150) {
+						self.state.hero.health = 150;
 					}
 				} else {
 					healthFull = true;
 				}
-			} else if(self.hero.x <= (self.healthPack3.x + 32)
-				&& self.healthPack3.x <= (self.hero.x + 32)
-				&& self.hero.y <= (self.healthPack3.y + 32)
-				&& self.healthPack3.y <= (self.hero.y + 32)
-				&& self.healthPack3.status === false
+			} else if(self.state.hero.x <= (self.state.healthPack3.x + 32)
+				&& self.state.healthPack3.x <= (self.state.hero.x + 32)
+				&& self.state.hero.y <= (self.state.healthPack3.y + 32)
+				&& self.state.healthPack3.y <= (self.state.hero.y + 32)
+				&& self.state.healthPack3.status === false
 			) {
-				if(self.hero.health < 150) {
+				if(self.state.hero.health < 150) {
 					healthSound.play();
-					self.healthPack3.status = true;
-					self.hero.health += 50;
+					self.state.healthPack3.status = true;
+					self.state.hero.health += 50;
 
-					if(self.hero.health > 150) {
-						self.hero.health = 150;
+					if(self.state.hero.health > 150) {
+						self.state.hero.health = 150;
 					}
 				} else {
 					healthFull = true;
 				}
-			} else if(self.hero.x <= (self.healthPack4.x + 32)
-				&& self.healthPack4.x <= (self.hero.x + 32)
-				&& self.hero.y <= (self.healthPack4.y + 32)
-				&& self.healthPack4.y <= (self.hero.y + 32)
-				&& self.healthPack4.status === false
+			} else if(self.state.hero.x <= (self.state.healthPack4.x + 32)
+				&& self.state.healthPack4.x <= (self.state.hero.x + 32)
+				&& self.state.hero.y <= (self.state.healthPack4.y + 32)
+				&& self.state.healthPack4.y <= (self.state.hero.y + 32)
+				&& self.state.healthPack4.status === false
 			) {
-				if(self.hero.health < 150) {
+				if(self.state.hero.health < 150) {
 					healthSound.play();
-					self.healthPack4.status = true;
-					self.hero.health += 50;
+					self.state.healthPack4.status = true;
+					self.state.hero.health += 50;
 
-					if(self.hero.health > 150) {
-						self.hero.health = 150;
+					if(self.state.hero.health > 150) {
+						self.state.hero.health = 150;
 					}
 				} else {
 					healthFull = true;
 				}
-			} else if(self.hero.x <= (self.healthPack5.x + 32)
-				&& self.healthPack5.x <= (self.hero.x + 32)
-				&& self.hero.y <= (self.healthPack5.y + 32)
-				&& self.healthPack5.y <= (self.hero.y + 32)
-				&& self.healthPack5.status === false
+			} else if(self.state.hero.x <= (self.state.healthPack5.x + 32)
+				&& self.state.healthPack5.x <= (self.state.hero.x + 32)
+				&& self.state.hero.y <= (self.state.healthPack5.y + 32)
+				&& self.state.healthPack5.y <= (self.state.hero.y + 32)
+				&& self.state.healthPack5.status === false
 			) {
-				if(self.hero.health < 150) {
+				if(self.state.hero.health < 150) {
 					healthSound.play();
-					self.healthPack5.status = true;
-					self.hero.health += 50;
+					self.state.healthPack5.status = true;
+					self.state.hero.health += 50;
 
-					if(self.hero.health > 150) {
-						self.hero.health = 150;
+					if(self.state.hero.health > 150) {
+						self.state.hero.health = 150;
 					}
 				} else {
 					healthFull = true;
@@ -755,43 +746,43 @@ var DungeonGame = React.createClass({
 			}
 
 			// Detect if player picked up weapon.
-			if(self.hero.x <= (self.weapon.x + 32)
-				&& self.weapon.x <= (self.hero.x + 32)
-				&& self.hero.y <= (self.weapon.y + 32)
-				&& self.weapon.y <= (self.hero.y + 32)
-				&& self.weapon.status === false
+			if(self.state.hero.x <= (self.state.weapon.x + 32)
+				&& self.state.weapon.x <= (self.state.hero.x + 32)
+				&& self.state.hero.y <= (self.state.weapon.y + 32)
+				&& self.state.weapon.y <= (self.state.hero.y + 32)
+				&& self.state.weapon.status === false
 			) {
 				weaponEquipSound.play();
-				self.hero.weapon = 'Hammer';
-				self.hero.maxDMG = 20;
-				self.weapon.status = true;
+				self.state.hero.weapon = 'Hammer';
+				self.state.hero.maxDMG = 20;
+				self.state.weapon.status = true;
 			}
 
 			// Detect if player picked up Golden Skill.
-			if(self.hero.x <= (self.skull.x + 32)
-				&& self.skull.x <= (self.hero.x + 32)
-				&& self.hero.y <= (self.skull.y + 32)
-				&& self.skull.y <= (self.hero.y + 32)
+			if(self.state.hero.x <= (self.state.skull.x + 32)
+				&& self.state.skull.x <= (self.state.hero.x + 32)
+				&& self.state.hero.y <= (self.state.skull.y + 32)
+				&& self.state.skull.y <= (self.state.hero.y + 32)
 			) {
-				self.skull.x = null;
-				self.skull.y = null;
+				self.state.skull.x = null;
+				self.state.skull.y = null;
 				weaponEquipSound.play();
-				self.hero.skull = true;
+				self.state.hero.skull = true;
 			}
 
 			// Detect if player is touching door.
-			if(self.hero.x <= ((canvas.width / 2.4) + 32)
-				&& canvas.width / 2.4 <= (self.hero.x + 32)
-				&& self.hero.y <= (0 + 32)
-				&& 0 <= (self.hero.y + 32)
+			if(self.state.hero.x <= ((canvas.width / 2.4) + 32)
+				&& canvas.width / 2.4 <= (self.state.hero.x + 32)
+				&& self.state.hero.y <= (0 + 32)
+				&& 0 <= (self.state.hero.y + 32)
 			) {
-				if(self.hero.skull === false && self.hero.level < 2) {
+				if(self.state.hero.skull === false && self.state.hero.level < 2) {
 					noLevelNoSkull = true;
-				} else if(self.hero.skull == true && self.hero.level < 2) {
+				} else if(self.state.hero.skull == true && self.state.hero.level < 2) {
 					noLevel = true;
-				} else if(self.hero.skull === false && self.hero.level == 2) {
+				} else if(self.state.hero.skull === false && self.state.hero.level == 2) {
 					noSkull = true;
-				} else if(self.hero.skull == true & self.hero.level == 2) {
+				} else if(self.state.hero.skull == true & self.state.hero.level == 2) {
 					doorPass = true;
 				}
 			} else {
@@ -830,124 +821,124 @@ var DungeonGame = React.createClass({
 			}
 
 			// Draw health packs
-			if(healthReady && self.healthPack.status === false) {
-				ctx.drawImage(healthImage, self.healthPack.x, self.healthPack.y, 25, 25);
+			if(healthReady && self.state.healthPack.status === false) {
+				ctx.drawImage(healthImage, self.state.healthPack.x, self.state.healthPack.y, 25, 25);
 			}
 
-			if(healthReady && self.healthPack2.status === false) {
-				ctx.drawImage(healthImage, self.healthPack2.x, self.healthPack2.y, 25, 25);
+			if(healthReady && self.state.healthPack2.status === false) {
+				ctx.drawImage(healthImage, self.state.healthPack2.x, self.state.healthPack2.y, 25, 25);
 			}
 
-			if(healthReady && self.healthPack3.status === false) {
-				ctx.drawImage(healthImage, self.healthPack3.x, self.healthPack3.y, 25, 25);
+			if(healthReady && self.state.healthPack3.status === false) {
+				ctx.drawImage(healthImage, self.state.healthPack3.x, self.state.healthPack3.y, 25, 25);
 			}
 
-			if(healthReady && self.healthPack4.status === false) {
-				ctx.drawImage(healthImage, self.healthPack4.x, self.healthPack4.y, 25, 25);
+			if(healthReady && self.state.healthPack4.status === false) {
+				ctx.drawImage(healthImage, self.state.healthPack4.x, self.state.healthPack4.y, 25, 25);
 			}
 
-			if(healthReady && self.healthPack5.status === false) {
-				ctx.drawImage(healthImage, self.healthPack5.x, self.healthPack5.y, 25, 25);
+			if(healthReady && self.state.healthPack5.status === false) {
+				ctx.drawImage(healthImage, self.state.healthPack5.x, self.state.healthPack5.y, 25, 25);
 			}
 
 			// Draw hero
 			if(heroReady) {
-				ctx.drawImage(heroImage, self.hero.x, self.hero.y, heroImage.width * 2.2, heroImage.height * 2.2);
+				ctx.drawImage(heroImage, self.state.hero.x, self.state.hero.y, heroImage.width * 2.2, heroImage.height * 2.2);
 			}
 
 			// Draw monsters
-			if(monsterReady && self.monster.health > 0) {
-				ctx.drawImage(monsterImage, self.monster.x, self.monster.y, monsterImage.width / 8, monsterImage.height / 8);
+			if(monsterReady && self.state.monster.health > 0) {
+				ctx.drawImage(monsterImage, self.state.monster.x, self.state.monster.y, monsterImage.width / 8, monsterImage.height / 8);
 			}
 			
-			if(monsterReady2 && self.monster2.health > 0) {
-				ctx.drawImage(monsterImage, self.monster2.x, self.monster2.y, monsterImage.width / 8, monsterImage.height / 8);
+			if(monsterReady2 && self.state.monster2.health > 0) {
+				ctx.drawImage(monsterImage, self.state.monster2.x, self.state.monster2.y, monsterImage.width / 8, monsterImage.height / 8);
 			}
 
-			if(monsterReady2 && self.monster3.health > 0) {
-				ctx.drawImage(monsterImage2, self.monster3.x, self.monster3.y, monsterImage2.width / 8, monsterImage2.height / 8);
+			if(monsterReady2 && self.state.monster3.health > 0) {
+				ctx.drawImage(monsterImage2, self.state.monster3.x, self.state.monster3.y, monsterImage2.width / 8, monsterImage2.height / 8);
 			}
 
-			if(monsterReady3 && self.monster4.health > 0) {
-				ctx.drawImage(monsterImage2, self.monster4.x, self.monster4.y, monsterImage2.width / 8, monsterImage2.height / 8);
+			if(monsterReady3 && self.state.monster4.health > 0) {
+				ctx.drawImage(monsterImage2, self.state.monster4.x, self.state.monster4.y, monsterImage2.width / 8, monsterImage2.height / 8);
 			}
 
-			if(monsterReady3 && self.monster5.health > 0) {
-				ctx.drawImage(monsterImage3, self.monster5.x, self.monster5.y, monsterImage3.width / 8, monsterImage3.height / 8);
+			if(monsterReady3 && self.state.monster5.health > 0) {
+				ctx.drawImage(monsterImage3, self.state.monster5.x, self.state.monster5.y, monsterImage3.width / 8, monsterImage3.height / 8);
 			}
 
-			if(monsterReady && self.monster6.health > 0) {
-				ctx.drawImage(monsterImage3, self.monster6.x, self.monster6.y, monsterImage3.width / 8, monsterImage3.height / 8);
+			if(monsterReady && self.state.monster6.health > 0) {
+				ctx.drawImage(monsterImage3, self.state.monster6.x, self.state.monster6.y, monsterImage3.width / 8, monsterImage3.height / 8);
 			}
 			
 			// Draw weapon
-			if(weaponReady && self.weapon.status === false) {
-				ctx.drawImage(weaponImage, self.weapon.x, self.weapon.y, weaponImage.width * 2, weaponImage.height * 2);
+			if(weaponReady && self.state.weapon.status === false) {
+				ctx.drawImage(weaponImage, self.state.weapon.x, self.state.weapon.y, weaponImage.width * 2, weaponImage.height * 2);
 			}
 
 			// Draw Golden Skull
-			if(skullReady && self.hero.skull === false) {
-				self.skull.x = 1058;
-				self.skull.y = 60;
+			if(skullReady && self.state.hero.skull === false) {
+				self.state.skull.x = 1058;
+				self.state.skull.y = 60;
 				ctx.drawImage(skullImage, 1058, 60, skullImage.width * 1.3, skullImage.height * 1.3);
 			} else {
-				self.skull.x = null;
-				self.skull.y = null;
+				self.state.skull.x = null;
+				self.state.skull.y = null;
 			}
 
 
 			// Monster death detection for all six monsters.
-			if(self.monster.health <= 0) {
-				self.monster.y = null;
-				self.monster.x = null;
-				if(self.monster.dead === false) {
+			if(self.state.monster.health <= 0) {
+				self.state.monster.y = null;
+				self.state.monster.x = null;
+				if(self.state.monster.dead === false) {
 					killSound.play();
-					self.monster.dead = true;
+					self.state.monster.dead = true;
 				}
 			}
 
-			if(self.monster2.health <= 0) {
-				self.monster2.y = null;
-				self.monster2.x = null;
-				if(self.monster2.dead === false) {
+			if(self.state.monster2.health <= 0) {
+				self.state.monster2.y = null;
+				self.state.monster2.x = null;
+				if(self.state.monster2.dead === false) {
 					killSound.play();
-					self.monster2.dead = true;
+					self.state.monster2.dead = true;
 				}
 			}
 
-			if(self.monster3.health <= 0) {
-				self.monster3.y = null;
-				self.monster3.x = null;
-				if(self.monster3.dead === false) {
+			if(self.state.monster3.health <= 0) {
+				self.state.monster3.y = null;
+				self.state.monster3.x = null;
+				if(self.state.monster3.dead === false) {
 					killSound.play();
-					self.monster3.dead = true;
+					self.state.monster3.dead = true;
 				}
 			}
 
-			if(self.monster4.health <= 0) {
-				self.monster4.y = null;
-				self.monster4.x = null;
-				if(self.monster4.dead === false) {
+			if(self.state.monster4.health <= 0) {
+				self.state.monster4.y = null;
+				self.state.monster4.x = null;
+				if(self.state.monster4.dead === false) {
 					killSound.play();
-					self.monster4.dead = true;
+					self.state.monster4.dead = true;
 				}
 			}
 
-			if(self.monster5.health <= 0) {
-				self.monster5.y = null;
-				self.monster5.x = null;
-				if(self.monster5.dead === false) {
+			if(self.state.monster5.health <= 0) {
+				self.state.monster5.y = null;
+				self.state.monster5.x = null;
+				if(self.state.monster5.dead === false) {
 					killSound.play();
-					self.monster5.dead = true;
+					self.state.monster5.dead = true;
 				}
 			}
 
-			if(self.monster6.health <= 0) {
-				self.monster6.y = null;
-				self.monster6.x = null;
-				if(self.monster6.dead === false) {
+			if(self.state.monster6.health <= 0) {
+				self.state.monster6.y = null;
+				self.state.monster6.x = null;
+				if(self.state.monster6.dead === false) {
 					killSound.play();
-					self.monster6.dead = true;
+					self.state.monster6.dead = true;
 				}
 			}
 
@@ -961,9 +952,9 @@ var DungeonGame = React.createClass({
 			}
 
 			// Player level up HP boost
-			if(self.hero.level == 2) {
-				self.hero.health = 200;
-				self.hero.maxHealth = 200;
+			if(self.state.hero.level == 2) {
+				self.state.hero.health = 200;
+				self.state.hero.maxHealth = 200;
 			}
 
 			if(noLevelNoSkull == true) {
@@ -995,18 +986,18 @@ var DungeonGame = React.createClass({
 			ctx.font = "24px Helvetica";
 			ctx.textAlign = "left";
 			ctx.textBaseline = "top";
-			ctx.fillText("HP: "+self.hero.health+'/'+self.hero.maxHealth, 20, 710);
+			ctx.fillText("HP: "+self.state.hero.health+'/'+self.state.hero.maxHealth, 20, 710);
 
 			ctx.fillStyle = "rgb(255, 255, 0)";
-			ctx.fillText("Level: "+self.hero.level, 170, 710);
+			ctx.fillText("Level: "+self.state.hero.level, 170, 710);
 			ctx.fillStyle = "rgb(26, 198, 255)";
-			ctx.fillText("Weapon: "+self.hero.weapon, 270, 710);
+			ctx.fillText("Weapon: "+self.state.hero.weapon, 270, 710);
 		}
 
 		// The main game loop
 		var main = function() {
-			if(self.hero.health <= 0) {
-				console.log('fuuuckk')
+			if(self.state.hero.health <= 0) {
+				// Pause game music.
 				sic.pause();
 	
 				// Clear the canvas
@@ -1024,12 +1015,15 @@ var DungeonGame = React.createClass({
 				ctx.fillText("(Press enter to try again)", canvas.width / 2, canvas.height / 2.4);
 
 				addEventListener("keyup", function(e) {
-					if(e.keyCode == 13) {
-						storeState(self2.getInitialState());
-						// Restart the game.
-						self2.setState(saveState);
+					if(e.keyCode == 13 && self.state.hero.health <= 0) {
+						
+						// Revert all states to its initial state.
+						self2.setState(self2.getInitialState());
+
+						// Call the initializeGame function.
 						dungeonGame.initializeGame();
 						main();
+						
 					}
 				});
 			} else {
@@ -1044,7 +1038,7 @@ var DungeonGame = React.createClass({
 		}
 
 		// Start the game.
-		var then = Date.now();
+		
 		generateObjects();
 		main();
 	},
