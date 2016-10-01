@@ -1,4 +1,13 @@
 var then = Date.now();
+// Sound asset variables
+var healthSound = new Audio("assets/sounds/health.mp3"),
+levelUpSound = new Audio("assets/sounds/levelup.mp3"),
+weaponEquipSound = new Audio("assets/sounds/weapon.mp3"),
+deathSound = new Audio("assets/sounds/death.mp3"),
+attackSound = new Audio("assets/sounds/attack.mp3"),
+killSound = new Audio("assets/sounds/kill.mp3"),
+sic = new Audio("assets/sounds/sic.mp3");
+
 var DungeonGame = React.createClass({
 	getInitialState: function() {
 		return {
@@ -101,7 +110,8 @@ var DungeonGame = React.createClass({
 	},
 
 	initializeGame: function() {
-
+		// restart the game music.
+		sic.currentTime = 0;
 		// Context variables
 		var canvas = document.getElementById('gameCanvas'),
 		ctx = canvas.getContext('2d'),
@@ -111,15 +121,6 @@ var DungeonGame = React.createClass({
 		noSkull = false,
 		doorPass = false,
 		healthFull = false;
-
-		// Sound asset variables
-		var healthSound = new Audio("assets/sounds/health.mp3"),
-		levelUpSound = new Audio("assets/sounds/levelup.mp3"),
-		weaponEquipSound = new Audio("assets/sounds/weapon.mp3"),
-		deathSound = new Audio("assets/sounds/death.mp3"),
-		attackSound = new Audio("assets/sounds/attack.mp3"),
-		killSound = new Audio("assets/sounds/kill.mp3"),
-		sic = new Audio("assets/sounds/sic.mp3");
 
 		// Start the game music.
 		sic.play();
@@ -995,6 +996,7 @@ var DungeonGame = React.createClass({
 
 		// The main game loop
 		var main = function() {
+
 			if(self.state.hero.health <= 0) {
 				// Pause game music.
 				sic.pause();
@@ -1012,20 +1014,23 @@ var DungeonGame = React.createClass({
 				ctx.font = "20px Helvetica";
 				ctx.fillStyle = "rgb(250, 100, 0)";
 				ctx.fillText("(Press enter to try again)", canvas.width / 2, canvas.height / 2.4);
+			} else if( doorPass == true) {
+				console.log('win.');
+				// Pause game music.
+				sic.pause();
+	
+				// Clear the canvas
+		        ctx.fillStyle = "#000000";
+		        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-				// Detects if player presses the ENTER button to restart the game.
-				addEventListener("keyup", function(e) {
-					if(e.keyCode == 13 && self.state.hero.health <= 0) {
-						
-						// Revert all states to its initial state.
-						self.setState(self.getInitialState());
-
-						// Call the initializeGame function.
-						dungeonGame.initializeGame();
-						main();
-						
-					}
-				});
+				ctx.fillStyle = "rgb(0, 255, 0)";
+				ctx.font = "50px Helvetica";
+				ctx.textAlign = "center";
+				ctx.textBaseline = "top";
+				ctx.fillText("You Win! Thank you for playing.", canvas.width / 2, canvas.height / 3);
+				ctx.font = "20px Helvetica";
+				ctx.fillStyle = "rgb(50, 255, 0)";
+				ctx.fillText("(Press enter to try again)", canvas.width / 2, canvas.height / 2.4);
 			} else {
 				var now = Date.now();
 				var delta = now - then;
@@ -1037,8 +1042,21 @@ var DungeonGame = React.createClass({
 			}
 		}
 
+		// Detects if player presses the ENTER button to restart the game.
+		addEventListener("keyup", function(e) {
+			if(e.keyCode == 13 && (self.state.hero.health <= 0 || doorPass == true)) {
+				doorPass = false;
+				console.log('keypressed')
+				// Revert all states to its initial state.
+				self.setState(self.getInitialState());
+
+				// Call the initializeGame function.
+				dungeonGame.initializeGame();
+				main();	
+			}
+		});
+
 		// Start the game.
-		
 		generateObjects();
 		main();
 	},
