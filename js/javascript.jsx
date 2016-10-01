@@ -12,6 +12,7 @@ winSound = new Audio("assets/sounds/win.mp3");
 var DungeonGame = React.createClass({
 	getInitialState: function() {
 		return {
+			lights: false,
 			hero: {
 				speed: 120, // movement in pixels per second
 				x: 48,
@@ -988,6 +989,23 @@ var DungeonGame = React.createClass({
 				ctx.fillText("Message: Door is locked! Requires Golden Skull to unlock!", 570, 714);
 			}
 
+			if(self.state.lights === false) {
+				// Limited player visibility.
+
+				// Top layer
+				ctx.fillStyle = "#000000";
+			    ctx.fillRect(0, 0, 3000, self.state.hero.y - 70);
+
+			    // Bottom layer 
+			    ctx.fillRect(0, self.state.hero.y + 90, 3000, 3000);
+
+			    // Left layer 
+			    ctx.fillRect(0, 0, self.state.hero.x - 70, 3000);
+
+			    // Right layer 
+			    ctx.fillRect(1200, 0, self.state.hero.x - 1090, 3000);
+			}
+
 			// Display player stats.
 			ctx.fillStyle = "rgb(0, 255, 0)";
 			ctx.font = "24px Helvetica";
@@ -1049,7 +1067,19 @@ var DungeonGame = React.createClass({
 				// Request to do this again ASAP
 				requestAnimationFrame(main);
 			}
+
 		}
+
+		// Detects is player pressed spacebar. If so, toggle lights.
+		addEventListener('keydown', function(e) {
+			if(e.keyCode == 32) {
+				if(self.state.lights === false) {
+					self.state.lights = true;
+				} else {
+					self.state.lights = false;
+				}
+			}
+		});
 
 		// Detects if player presses the ENTER button to restart the game.
 		addEventListener("keyup", function(e) {
