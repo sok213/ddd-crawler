@@ -1053,7 +1053,6 @@ var DungeonGame = React.createClass({
 				ctx.fillStyle = "rgb(250, 100, 0)";
 				ctx.fillText("(Press enter to try again)", canvas.width / 2, canvas.height / 2.4);
 			} else if( doorPass == true) {
-				console.log('win.');
 				// Pause game music.
 				sic.pause();
 				winSound.currentTime = 0;
@@ -1090,7 +1089,6 @@ var DungeonGame = React.createClass({
 					winSound.pause();
 					doorPass = false;
 				}
-				console.log('keypressed')
 				// Revert all states to its initial state.
 				self.setState(self.getInitialState());
 
@@ -1113,6 +1111,9 @@ var DungeonGame = React.createClass({
     </div>
 	}
 });
+
+// LOL
+console.log("Aliens exists.");
 
 // Render the canvas to the DOM.
 var dungeonGame = ReactDOM.render(<DungeonGame />, document.getElementById('body'));
