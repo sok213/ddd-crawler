@@ -8,9 +8,16 @@ Enemy - http://orig07.deviantart.net/fee7/f/2014/058/f/8/demon_sprite_by_studiof
 Sound Assets:
 Weapon pick up sound - https://www.freesound.org/people/GameAudio/sounds/220173/
 Health Pick up sound - https://www.freesound.org/people/Cman634/sounds/198784/
+Game Music - Slipknot Self Titled 8 Bits - by Purple Baroness - https://www.youtube.com/watch?v=ckCrkuh9_GQ&index=68&list=LLU_q8h6v2BFIESC3netHyRg
+Game Win Music - ÉWN & Whogaux - Start That Fire [NCS Release] - https://www.youtube.com/watch?v=ACFvhTR__OI&index=1&list=LLU_q8h6v2BFIESC3netHyRg
 
 Player movement and collision code snippet from - http://www.lostdecadegames.com/how-to-make-a-simple-html5-canvas-game/
 
 *NOTE - All assets are legally used and each are all granted permission for free usage. Code that was borrowed from open resources have been completely altered and is distinguishably different from its orginal source. The majority of the code along with the entire project was developed by Sophanarith Sok.
 
-Feel free to view my Github - https://github.com/sok213
+My Github - https://github.com/sok213
+
+Contact - sophanarithsok@gmail.com
+
+Social Media 
+Twitter - https://twitter.com/NnjaRattleSnake

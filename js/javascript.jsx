@@ -1078,6 +1078,7 @@ var DungeonGame = React.createClass({
     	<div className="logo"><img src="logo.png"></img></div>
 		<canvas id='gameCanvas' height='750' width='1200'></canvas>
 		<h4>Tip: Press spacebar to toggle visibility. &nbsp;&nbsp;<a href="https://github.com/sok213/ddd-crawler/blob/master/js/javascript.jsx" target="_blank">View source code.</a></h4>
+		<h3>&nbsp;&nbsp;<a href="https://github.com/sok213/ddd-crawler/blob/master/credit.txt" target="_blank">credits</a></h3>
     </div>
 	}
 });
