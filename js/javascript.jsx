@@ -106,7 +106,6 @@ var DungeonGame = React.createClass({
 		var canvas = document.getElementById('gameCanvas'),
 		ctx = canvas.getContext('2d'),
 		self = this,
-		self2 = this,
 		noLevelNoSkull = false,
 		noLevel = false,
 		noSkull = false,
@@ -1014,11 +1013,12 @@ var DungeonGame = React.createClass({
 				ctx.fillStyle = "rgb(250, 100, 0)";
 				ctx.fillText("(Press enter to try again)", canvas.width / 2, canvas.height / 2.4);
 
+				// Detects if player presses the ENTER button to restart the game.
 				addEventListener("keyup", function(e) {
 					if(e.keyCode == 13 && self.state.hero.health <= 0) {
 						
 						// Revert all states to its initial state.
-						self2.setState(self2.getInitialState());
+						self.setState(self.getInitialState());
 
 						// Call the initializeGame function.
 						dungeonGame.initializeGame();
